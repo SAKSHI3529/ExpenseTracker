@@ -40,7 +40,7 @@ const ExpenseTable = () => {
     try {
       if (editingExpense) {
         // Update existing expense
-        await axios.put(`http://localhost:8080/api/expenses/${editingExpense._id}`, {
+        await axios.put(`http://localhost:8080/api/expenses/${editingExpense.id}`, {
           title: formData.title,
           category: formData.category,
           amount: parseFloat(formData.amount), // Convert amount to number
