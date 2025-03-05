@@ -43,6 +43,10 @@ public class ExpenseService {
         return expenseRepo.findById(id);
     }
 
+//    public Expense getExpenseById(int expenseId) {
+//        return expenseRepo.findById(expenseId).get();
+//    }
+
     // Get Expenses by Category
     public List<Expense> getExpensesByCategory(String category) {
         return expenseRepo.findByCategory(category);
@@ -53,8 +57,15 @@ public class ExpenseService {
         return expenseRepo.findByAccount(account);
     }
 
+    //update
+    public Expense updateExpense(Expense expense) {
+        return expenseRepo.save(expense); //  MongoDB will update if _id exists
+    }
+
     // Delete an Expense
     public void deleteExpense(String id) {
         expenseRepo.deleteById(id);
     }
+
+
 }

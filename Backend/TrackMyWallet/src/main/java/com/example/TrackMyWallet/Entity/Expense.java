@@ -110,4 +110,19 @@ public class Expense {
     }
 
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", amount='" + amount + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", category='" + category + '\'' +
+                ", account='" + account + '\'' +
+                ", note='" + note + '\'' +
+
+                '}';
+    }
+
 }

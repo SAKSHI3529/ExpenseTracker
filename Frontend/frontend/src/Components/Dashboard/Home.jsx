@@ -14,6 +14,7 @@ import {
   FaList,
   FaPiggyBank,
   FaCalendarAlt,
+  FaChartPie
 } from "react-icons/fa";
 
 import { assets } from "../../assets/assets";
@@ -76,7 +77,7 @@ const Dashboard = () => {
     { icon: FaArrowDown, text: "Incomes", action: "income" },
     { icon: FaList, text: "Categories", action: "categories" },
     { icon: FaPiggyBank, text: "Savings Goals", action: "goals" },
-    { icon: FaBalanceScale, text: "Debt Tracker", action: "debt" },
+    { icon: FaChartPie, text: "Charts", action: "charts" },
     { icon: FaMoneyBill, text: "Budgets", action: "budget" },
     { icon: FaCalendarAlt, text: "Monthly Summary", action: "summary" },
   ];

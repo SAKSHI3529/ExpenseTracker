@@ -4,6 +4,7 @@ package com.example.TrackMyWallet.Controller;
 import com.example.TrackMyWallet.Entity.Expense;
 import com.example.TrackMyWallet.Service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,10 +53,35 @@ public class ExpenseController {
         return expenseService.getExpensesByAccount(account);
     }
 
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Expense> updateExpense(@PathVariable String id, @RequestBody Expense updatedExpense) {
+//        Optional<Expense> existingExpense = expenseService.getExpenseById(id);
+//        if (existingExpense.isPresent()) {
+//            updatedExpense.setId(id); // Keep the same ID
+//            return ResponseEntity.ok(expenseService.addExpense(updatedExpense));
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> updateExpense(@PathVariable("id") String id, @RequestBody Expense updatedExpense) {
+        if (!expenseService.getExpenseById(id).isPresent()) {
+            return ResponseEntity.notFound().build(); // ✅ Returns 404 if not found
+        }
+        updatedExpense.setId(id); // ✅ Ensures ID is set correctly
+        Expense savedExpense = expenseService.updateExpense(updatedExpense);
+        return ResponseEntity.ok(savedExpense);
+    }
+
+
+
+
     // Delete an Expense
     @DeleteMapping("/{id}")
-    public String deleteExpense(@PathVariable String id) {
+    public String deleteExpense(@PathVariable("id") String id) {
         expenseService.deleteExpense(id);
         return "Expense deleted successfully!";
     }
+
 }
