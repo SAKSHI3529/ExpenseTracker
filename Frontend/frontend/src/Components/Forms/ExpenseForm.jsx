@@ -30,9 +30,24 @@ const ExpenseForm = () => {
     });
   };
 
+  // Validate form before submission
+  const validateForm = () => {
+    if (!formData.title.trim() || !formData.amount.trim() || !formData.date || !formData.time || !formData.category || !formData.account) {
+      alert("All fields except 'Note' are required!");
+      return false;
+    }
+    if (isNaN(formData.amount) || parseFloat(formData.amount) <= 0) {
+      alert("Amount must be a valid number greater than zero!");
+      return false;
+    }
+    return true;
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
+
+    if (!validateForm()) return; // Stop submission if validation fails
 
     try {
       const response = await axios.post("http://localhost:8080/api/expenses", formData);
@@ -47,7 +62,7 @@ const ExpenseForm = () => {
         time: new Date().toTimeString().split(" ")[0].slice(0, 5), // Reset with current time
         category: "",
         account: "",
-        note: "",
+        note: "", // Keep note optional
       });
     } catch (error) {
       console.error("Error adding expense:", error);
@@ -61,13 +76,14 @@ const ExpenseForm = () => {
       <form onSubmit={handleSubmit}>
         {/* Title */}
         <div className="flex flex-col mb-4">
-          <label className="text-base mb-1">Title</label>
+          <label className="text-base mb-1 ">Title</label>
           <input 
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             placeholder="Enter Title"
+            required
             className="w-full p-2 border rounded"
           />
         </div>
@@ -76,16 +92,17 @@ const ExpenseForm = () => {
         <div className="flex flex-col mb-4">
           <label className="text-base mb-1">Amount</label>
           <input 
-            type="number"
+            type="text"
             name="amount"
             value={formData.amount}
             onChange={handleChange}
-            placeholder="Enter Amount"
+            placeholder="Enter Amount (e.g., 444 or 444.50)"
+            required
             className="w-full p-2 border rounded"
           />
         </div>
 
-        {/* Date - Auto-filled */}
+        {/* Date */}
         <div className="flex flex-col mb-4">
           <label className="text-base mb-1">Date</label>
           <input 
@@ -93,11 +110,12 @@ const ExpenseForm = () => {
             name="date"
             value={formData.date}
             onChange={handleChange}
+            required
             className="w-full p-2 border rounded bg-white dark:bg-[#1e1e1e8a] dark:text-white"
           />
         </div>
 
-        {/* Time - Auto-filled */}
+        {/* Time */}
         <div className="flex flex-col mb-4">
           <label className="text-base mb-1">Time</label>
           <input 
@@ -105,6 +123,7 @@ const ExpenseForm = () => {
             name="time"
             value={formData.time}
             onChange={handleChange}
+            required
             className="w-full p-2 border rounded bg-white dark:bg-[#1e1e1e8a] dark:text-white"
           />
         </div>
@@ -116,6 +135,7 @@ const ExpenseForm = () => {
             name="category"
             value={formData.category}
             onChange={handleChange}
+            required
             className="w-full p-2 border rounded bg-white dark:bg-[#1e1e1e8a] dark:text-white"
           >
             <option value="">Select Category</option>
@@ -134,6 +154,7 @@ const ExpenseForm = () => {
             name="account"
             value={formData.account}
             onChange={handleChange}
+            required
             className="w-full p-2 border rounded bg-white dark:bg-[#1e1e1e8a] dark:text-white"
           >
             <option value="">Select Account</option>
@@ -144,9 +165,9 @@ const ExpenseForm = () => {
           </select>
         </div>
 
-        {/* Add Note */}
+        {/* Add Note (Optional) */}
         <div className="flex flex-col mb-4">
-          <label className="text-base mb-1">Add Note</label>
+          <label className="text-base mb-1">Add Note (Optional)</label>
           <textarea 
             name="note"
             value={formData.note}

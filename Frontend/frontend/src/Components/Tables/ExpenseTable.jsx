@@ -121,7 +121,7 @@ const ExpenseTable = () => {
                 <TableCell>{expense.account}</TableCell>
                 <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
                 <TableCell>{expense.time}</TableCell>
-                <TableCell>{expense.note}</TableCell>
+                <TableCell>{expense.note} --Not Added--</TableCell>
                 <TableCell>
                   <button onClick={() => handleEdit(expense)} className="mr-2 px-2 py-1 bg-yellow-500 text-white rounded">Edit</button>
                   <button onClick={() => handleDelete(expense.id)} className="px-2 py-1 bg-red-500 text-white rounded">Delete</button>
