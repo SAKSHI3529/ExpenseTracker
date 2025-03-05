@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { Link } from "react-router-dom";
 import {
   FaBars,
@@ -25,9 +26,12 @@ import SetBudgetForm from "../Forms/SetBudgetForm";
 import AddAccountForm from "../Forms/AddAccountForm";
 import SetGoalForm from "../Forms/SetGoalForm";
 import ExpenseTable from "../Tables/ExpenseTable";
+import EditExpenseForm from "../Forms/EditExpenseForm";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editingExpense, setEditingExpense] = useState(null); // Track which expense is being edited
+
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
@@ -44,6 +48,9 @@ const Dashboard = () => {
   }, [darkMode]);
 
   const renderComponent = () => {
+    if (editingExpense) {
+      return <EditExpenseForm expense={editingExpense} onClose={() => setEditingExpense(null)} />;
+    }
     switch (selectedComponent) {
       case "expenses":
         return <ExpenseForm />;
@@ -57,7 +64,7 @@ const Dashboard = () => {
         return <SetGoalForm />;
 
         case "expenseTable":  // ✅ Added case for ExpenseTable
-        return <ExpenseTable/>;
+        return <ExpenseTable onEdit={setEditingExpense}/>;
       default:
         return <Main />;
     }

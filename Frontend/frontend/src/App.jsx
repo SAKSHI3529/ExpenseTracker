@@ -16,8 +16,7 @@ const router = createBrowserRouter([
 
   {
     path:"/expenses",
-    element:<div>
-       
+    element:<div>   
        <ExpenseTable/>
     </div>
     
