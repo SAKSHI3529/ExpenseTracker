@@ -7,7 +7,7 @@ const Main = () => {
         
 
 
-        <main className="flex-1 p-6 md:ml-64">
+        <main className="flex-1 w-full">
           <h2 className="text-2xl font-bold mb-4">Monthly Summary</h2>
 
           {/* Summary Cards */}

@@ -1,62 +1,64 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import './App.css'
+import './App.css';
 import Home from "./Components/Dashboard/Home";
 import ExpenseTable from "./Components/Tables/ExpenseTable";
-// import Expence from "./Components/AddForms/Expence";
+import Loader from "./Components/Dashboard/Loader";
+import { useEffect, useState } from "react";
+import publicAxios from "./utils/axiosinstance"; // ✅ Import the correct Axios instance
+import TableDemo from "./Components/Tables/TableDemo";
 
 const router = createBrowserRouter([
   {
-    path:"/",
-    element:<div>
-       <Home/>,
-    </div>
-    
+    path: "/",
+    element: <Home />,
   },
-
   {
-    path:"/expenses",
-    element:<div>   
-       <ExpenseTable/>
-    </div>
-    
+    path: "/expenses",
+    element: <ExpenseTable />,
   },
-
-])
+]);
 
 function App() {
+  const [loading, setLoading] = useState(false);
 
- 
+  useEffect(() => {
+    // ✅ Request Interceptor
+    const requestInterceptor = publicAxios.interceptors.request.use(
+      (config) => {
+        setLoading(true);
+        return config;
+      },
+      (error) => {
+        setLoading(false);
+        return Promise.reject(error);
+      }
+    );
+
+    // ✅ Response Interceptor
+    const responseInterceptor = publicAxios.interceptors.response.use(
+      (response) => {
+        setLoading(false);
+        return response;
+      },
+      (error) => {
+        setLoading(false);
+        return Promise.reject(error);
+      }
+    );
+
+    // ✅ Cleanup Interceptors on Component Unmount
+    return () => {
+      publicAxios.interceptors.request.eject(requestInterceptor);
+      publicAxios.interceptors.response.eject(responseInterceptor);
+    };
+  }, []);
 
   return (
     <>
+      {loading && <Loader />} {/* ✅ Show loader when loading is true */}
       <RouterProvider router={router} />
-
-     
-
-    {/* <Header/> */}
-    {/* <Home/> */}
-    {/* <FinanceDashboard/> */}
-
     </>
-  )
+  );
 }
 
-export default App
-
-
-
-// <Router>
-//       <div className="flex min-h-screen">
-//        <Home/>
-//         <div className="flex-1 flex flex-col">
-//           {/* <Header/> */}
-
-//           <main className="p-6 bg-gray-100 dark:bg-gray-900 flex-1">
-//             <Routes>
-//               <Route path="/" element={<Home />} />
-//             </Routes>
-//           </main>
-//         </div>
-//       </div>
-//     </Router>
+export default App;

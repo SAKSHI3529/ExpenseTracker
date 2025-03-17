@@ -15,7 +15,7 @@ import {
   FaList,
   FaPiggyBank,
   FaCalendarAlt,
-  FaChartPie
+  FaChartPie,
 } from "react-icons/fa";
 
 import { assets } from "../../assets/assets";
@@ -49,7 +49,12 @@ const Dashboard = () => {
 
   const renderComponent = () => {
     if (editingExpense) {
-      return <EditExpenseForm expense={editingExpense} onClose={() => setEditingExpense(null)} />;
+      return (
+        <EditExpenseForm
+          expense={editingExpense}
+          onClose={() => setEditingExpense(null)}
+        />
+      );
     }
     switch (selectedComponent) {
       case "expenses":
@@ -63,8 +68,8 @@ const Dashboard = () => {
       case "goals":
         return <SetGoalForm />;
 
-        case "expenseTable":  // ✅ Added case for ExpenseTable
-        return <ExpenseTable onEdit={setEditingExpense}/>;
+      case "expenseTable": // ✅ Added case for ExpenseTable
+        return <ExpenseTable onEdit={setEditingExpense} />;
       default:
         return <Main />;
     }
@@ -92,10 +97,10 @@ const Dashboard = () => {
   return (
     <>
       {/* NAVBAR */}
-      <nav className="bg-white dark:bg-[#1E1E1E] shadow-md">
-        <div className="max-w-screen-xl flex justify-between items-center mx-auto p-4">
+      <nav className="bg-white dark:bg-[#1E1E1E] shadow-md md:max-lg:flex">
+        <div className="max-w-screen-xl flex justify-between items-center mx-auto md:ml-64 p-6">
           <Link to="/" className="flex items-center space-x-3">
-            <span className="text-2xl pl-40 font-semibold dark:text-white">
+            <span className="text-2xl  font-semibold dark:text-white">
               TrackMyWallet
             </span>
           </Link>
@@ -122,7 +127,7 @@ const Dashboard = () => {
 
       {/* HOME IMAGE */}
 
-      <div className="w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px]">
+      <div className="w-full h-[100px] sm:h-[300px] md:h-[400px] lg:h-[400px]">
         <img
           src={assets.home_img}
           alt="Dashboard Banner"
@@ -132,7 +137,7 @@ const Dashboard = () => {
 
       {/* FORM BUTTONS */}
 
-      <div className="bg-[#1E1E1E] dark:bg-[#101010] text-white py-6 flex flex-wrap justify-center gap-4 px-4">
+      <div className="bg-[#1E1E1E] dark:bg-[#101010] text-white py-6 flex flex-wrap justify-center gap-4 px-4 md:ml-64">
         {buttons.map((btn, index) => (
           <button
             key={index}
@@ -147,9 +152,9 @@ const Dashboard = () => {
 
       {/* SIDEBAR */}
 
-      <div className="bg-[#1E1E1E] dark:bg-[#101010] text-white min-h-screen flex">
+      <div className="bg-[#1E1E1E] dark:bg-[#101010] text-white min-h-screen flex ">
         <aside
-          className={`fixed top-0 left-0 h-full w-64 bg-gray-200 dark:bg-[#101010] p-6 border-r border-gray-700 transition-transform duration-500 ${
+          className={`fixed  top-0 left-0 h-full w-64 bg-gray-200 dark:bg-[#101010] p-6 border-r border-gray-700 transition-transform duration-500 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           }`}
         >
@@ -166,9 +171,14 @@ const Dashboard = () => {
           {/* Sidebar Menu */}
           <ul className="space-y-4">
             {sidebarItems.map((item, index) => (
-              <li key={index} className="flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer">
+              <li
+                key={index}
+                className="flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer"
+              >
                 <button
-                  onClick={() => setSelectedComponent(item.action)}
+                  onClick={() =>{ setSelectedComponent(item.action);
+                    setSidebarOpen(false);  }}
+                  
                   className="flex items-center gap-3 w-full dark:text-white"
                 >
                   {React.createElement(item.icon)}
@@ -179,7 +189,16 @@ const Dashboard = () => {
           </ul>
         </aside>
 
-        <div className="flex-1 p-6 md:ml-64">{renderComponent()}</div>
+        {/* <div className=" relative overflow-x-auto shadow-md sm:rounded-lg">
+          {renderComponent()}
+        </div> */}
+
+        {/* Main Content */}
+        <div className="w-full md:ml-64 p-6 ">
+          <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+            {renderComponent()}
+          </div>
+        </div>
       </div>
     </>
   );

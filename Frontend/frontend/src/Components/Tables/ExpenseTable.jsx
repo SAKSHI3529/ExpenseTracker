@@ -32,12 +32,15 @@ const ExpenseTable = ({onEdit}) => {
   };
 
   return (
-    <div className="p-6 dark:bg-[#1E1E1E] text-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">📊 Expenses</h2>
+    <>
+    {/* <div className="p-6 dark:bg-[#1E1E1E] text-white rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">📊 Expenses</h2> */}
 
       {/* Expense Table */}
-      <Table className="min-w-full dark:bg-[#35343453] rounded-lg">
-        <TableHeader className="dark:bg-[#35343453]">
+      <div className=" relative overflow-x-auto shadow-md sm:rounded-lg text-white rounded-lg w-full ">
+      <h2 className="text-2xl font-bold mb-4 pb-4 text-gray-800 dark:text-white">Expense</h2>
+      <Table className="w-full text-sm text-left rtl:text-right  ">
+        <TableHeader className="dark:bg-[#35343453] text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400">
           <TableRow>
             <TableHead className="text-left">📌 Title</TableHead>
             <TableHead className="text-left">📂 Category</TableHead>
@@ -83,7 +86,9 @@ const ExpenseTable = ({onEdit}) => {
           )}
         </TableBody>
       </Table>
+    {/* </div> */}
     </div>
+    </>
   );
 };
 
