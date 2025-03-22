@@ -5,6 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+    <script>
+      // ✅ Ensure Dark Mode is enabled by default
+      if (!localStorage.getItem('color-theme')) {
+          localStorage.setItem('color-theme', 'dark');
+      }
+  
+      // ✅ Apply user's preference or default to Dark Mode
+      if (localStorage.getItem('color-theme') === 'dark') {
+          document.documentElement.classList.add('dark');
+      } else {
+          document.documentElement.classList.remove('dark');
+      }
+  </script>
+  
+  
+  
   </head>
   <body>
     <div id="root"></div>

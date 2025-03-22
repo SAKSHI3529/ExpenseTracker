@@ -27,6 +27,7 @@ import AddAccountForm from "../Forms/AddAccountForm";
 import SetGoalForm from "../Forms/SetGoalForm";
 import ExpenseTable from "../Tables/ExpenseTable";
 import EditExpenseForm from "../Forms/EditExpenseForm";
+import Navbar from "./Navbar";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -68,6 +69,9 @@ const Dashboard = () => {
       case "goals":
         return <SetGoalForm />;
 
+        case "home":
+          return <Main/>;
+
       case "expenseTable": // ✅ Added case for ExpenseTable
         return <ExpenseTable onEdit={setEditingExpense} />;
       default:
@@ -84,6 +88,7 @@ const Dashboard = () => {
   ];
 
   const sidebarItems = [
+    { icon: FaDatabase, text: "Dashboard", action: "home" },
     { icon: FaDatabase, text: "Accounts", action: "account" },
     { icon: FaArrowUp, text: "Expenses", action: "expenseTable" }, // ✅ Clicking this shows ExpenseTable
     { icon: FaArrowDown, text: "Incomes", action: "income" },
@@ -97,17 +102,17 @@ const Dashboard = () => {
   return (
     <>
       {/* NAVBAR */}
-      <nav className="bg-white dark:bg-[#1E1E1E] shadow-md md:max-lg:flex">
-        <div className="max-w-screen-xl flex justify-between items-center mx-auto md:ml-64 p-6">
+      {/* <nav className="bg-white dark:bg-[##FFFFFF]  shadow-md md:max-lg:flex  ">
+        <div className="max-w-screen-xl flex justify-between items-center mx-auto md:ml-64 p-4">
           <Link to="/" className="flex items-center space-x-3">
-            <span className="text-2xl  font-semibold dark:text-white">
+            <span className="text-2xl  font-semibold dark:text-[#17153B]">
               TrackMyWallet
             </span>
           </Link>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-100 hover:bg-[#E8F9FF] dark:hover:bg-[#C4D9FF] transition"
             >
               {darkMode ? (
                 <FaSun className="text-yellow-400 text-xl" />
@@ -123,26 +128,28 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-      </nav>
+      </nav> */}
+
+  <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} /> 
 
       {/* HOME IMAGE */}
 
-      <div className="w-full h-[100px] sm:h-[300px] md:h-[400px] lg:h-[400px]">
+      {/* <div className="w-full h-[100px] sm:h-[300px] md:h-[400px] lg:h-[400px]">
         <img
-          src={assets.home_img}
+          src={assets.home2_img}
           alt="Dashboard Banner"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover "
         />
-      </div>
+      </div> */}
 
       {/* FORM BUTTONS */}
 
-      <div className="bg-[#1E1E1E] dark:bg-[#101010] text-white py-6 flex flex-wrap justify-center gap-4 px-4 md:ml-64">
+      <div className="bg-[#1E1E1E] dark:bg-[#f9fafb] dark:text-[#17153B] py-6 flex flex-wrap justify-center gap-4 px-4 md:ml-64">
         {buttons.map((btn, index) => (
           <button
             key={index}
             onClick={() => setSelectedComponent(btn.action)}
-            className="flex items-center gap-2 px-4 py-2 border border-white rounded-lg hover:bg-white hover:text-black transition"
+            className="flex items-center gap-2 px-4 py-2 border border-[#17153B] rounded-lg hover:bg-[#9CB9FF] hover:text-black transition"
           >
             {React.createElement(btn.icon)}
             {btn.text}
@@ -152,17 +159,17 @@ const Dashboard = () => {
 
       {/* SIDEBAR */}
 
-      <div className="bg-[#1E1E1E] dark:bg-[#101010] text-white min-h-screen flex ">
+      <div className="bg-[#FBFBFB] dark:bg-[#f9fafb] dark:text-[#17153B] min-h-screen flex ">
         <aside
-          className={`fixed  top-0 left-0 h-full w-64 bg-gray-200 dark:bg-[#101010] p-6 border-r border-gray-700 transition-transform duration-500 ${
+          className={`fixed  top-0 left-0 h-full w-64  bg-[#FFFFFF] p-6 border-r border-gray-700 transition-transform duration-500 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           }`}
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold dark:text-white"></h2>
+            <h2 className="text-xl font-bold dark:text-[#17153B]"></h2>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="md:hidden text-white p-2"
+              className="md:hidden dark:text-[#17153B] p-2"
             >
               <FaTimes className="text-xl" />
             </button>
@@ -173,13 +180,13 @@ const Dashboard = () => {
             {sidebarItems.map((item, index) => (
               <li
                 key={index}
-                className="flex items-center gap-3 hover:bg-gray-700 p-2 rounded-md cursor-pointer"
+                className="flex items-center gap-3 hover:bg-[#9CB9FF] p-2 rounded-md cursor-pointer"
               >
                 <button
                   onClick={() =>{ setSelectedComponent(item.action);
                     setSidebarOpen(false);  }}
                   
-                  className="flex items-center gap-3 w-full dark:text-white"
+                  className="flex items-center gap-3 w-full dark:text-[#17153B] hover:bg-[#9CB9FF]"
                 >
                   {React.createElement(item.icon)}
                   {item.text}
@@ -194,13 +201,13 @@ const Dashboard = () => {
         </div> */}
 
         {/* Main Content */}
-        <div className="w-full md:ml-64 p-6 ">
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+        <div className="w-full md:ml-64 p-6   ">
+          <div className="relative overflow-x-auto  sm:rounded-lg  ">
             {renderComponent()}
           </div>
         </div>
       </div>
-    </>
+    </> 
   );
 };
 
