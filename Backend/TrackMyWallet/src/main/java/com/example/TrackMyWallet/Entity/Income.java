@@ -109,7 +109,7 @@ public class Income {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "Income{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", amount='" + amount + '\'' +
