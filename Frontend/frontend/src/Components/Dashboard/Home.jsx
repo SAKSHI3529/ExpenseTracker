@@ -28,6 +28,7 @@ import SetGoalForm from "../Forms/SetGoalForm";
 import ExpenseTable from "../Tables/ExpenseTable";
 import EditExpenseForm from "../Forms/EditExpenseForm";
 import Navbar from "./Navbar";
+import AccountCard from "../Tables/AccountCard";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -65,7 +66,7 @@ const Dashboard = () => {
       case "budget":
         return <SetBudgetForm />;
       case "account":
-        return <AddAccountForm />;
+        return <AccountCard />;
       case "goals":
         return <SetGoalForm />;
 
@@ -83,7 +84,7 @@ const Dashboard = () => {
     { icon: FaArrowUp, text: "Add Expense", action: "expenses" },
     { icon: FaArrowDown, text: "Add Income", action: "income" },
     { icon: FaMoneyBill, text: "Add Budget", action: "budget" },
-    { icon: FaBalanceScale, text: "Add New Account", action: "account" },
+    // { icon: FaBalanceScale, text: "Add New Account", action: "account" },
     { icon: FaBullseye, text: "Add New Goal", action: "goals" },
   ];
 
