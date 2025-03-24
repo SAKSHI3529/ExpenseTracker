@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "../ui/Alert";
 
-const EditExpenseForm = ({ expense, onClose }) => {
-  const [formData, setFormData] = useState(expense || {});
+const EditIncomeForm = ({ income, onClose }) => {
+  const [formData, setFormData] = useState(income || {});
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
 
   // Automatically hide alert after 10 seconds
@@ -14,12 +14,12 @@ const EditExpenseForm = ({ expense, onClose }) => {
     }
   }, [alert.show]);
 
-  // Update formData when expense changes
+  // Update formData when income changes
   useEffect(() => {
-    if (expense) {
-      setFormData(expense);
+    if (income) {
+      setFormData(income);
     }
-  }, [expense]);
+  }, [income]);
 
   // Handle Input Change
   const handleChange = (e) => {
@@ -30,14 +30,14 @@ const EditExpenseForm = ({ expense, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/api/expenses/${expense.id}`, formData);
-      setAlert({ show: true, type: "success", message: "Expense updated successfully!" });
+      await axios.put(`http://localhost:8080/api/income/${income.id}`, formData);
+      setAlert({ show: true, type: "success", message: "income updated successfully!" });
       setTimeout(() => {
         onClose(); // ✅ Closes form after update
       }, 1000);
     } catch (error) {
       console.log(error);
-      setAlert({ show: true, type: "error", message: "Failed to update expense." });
+      setAlert({ show: true, type: "error", message: "Failed to update income." });
     }
   };
 
@@ -53,9 +53,9 @@ const EditExpenseForm = ({ expense, onClose }) => {
           />
         )}
       </div>
-      <div className="p-6 dark:bg-[#ffff] dark:text-gray-900 rounded-lg shadow-lg max-w-lg mx-auto">
-        <h2 className="text-2xl font-bold mb-4">Edit Expense</h2>
-        <form onSubmit={handleSubmit} className="p-4 dark:bg-[#ffff] rounded-lg">
+      <div className="p-6 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg max-w-lg mx-auto">
+        <h2 className="text-2xl font-bold mb-4">Edit income</h2>
+        <form onSubmit={handleSubmit} className="p-4 dark:bg-gray-800 rounded-lg">
           <input type="text" name="title" value={formData.title || ""} onChange={handleChange} required className="w-full p-2 border rounded mb-2" placeholder="Title"/>
           <input type="text" name="category" value={formData.category || ""} onChange={handleChange} required className="w-full p-2 border rounded mb-2" placeholder="Category"/>
           <input type="number" name="amount" value={formData.amount || ""} onChange={handleChange} required className="w-full p-2 border rounded mb-2" placeholder="Amount"/>
@@ -63,7 +63,7 @@ const EditExpenseForm = ({ expense, onClose }) => {
           <input type="date" name="date" value={formData.date || ""} onChange={handleChange} required className="w-full p-2 border rounded mb-2"/>
           <input type="time" name="time" value={formData.time || ""} onChange={handleChange} required className="w-full p-2 border rounded mb-2"/>
           <textarea name="note" value={formData.note || ""} onChange={handleChange} className="w-full p-2 border rounded mb-2" placeholder="Note (Optional)"></textarea>
-          <button type="submit" className="w-full bg-blue-300 text-white p-2 rounded hover:bg-blue-500">Update Expense</button>
+          <button type="submit" className="w-full bg-blue-300 text-white p-2 rounded hover:bg-blue-500">Update income</button>
           <button type="button" onClick={onClose} className="w-full bg-gray-300 text-white p-2 rounded mt-2 hover:bg-gray-500">Cancel</button>
         </form>
       </div>
@@ -71,4 +71,4 @@ const EditExpenseForm = ({ expense, onClose }) => {
   );
 };
 
-export default EditExpenseForm;
+export default EditIncomeForm;

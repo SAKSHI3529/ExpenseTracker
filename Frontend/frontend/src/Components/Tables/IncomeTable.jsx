@@ -9,60 +9,61 @@ import {
   TableHead,
   TableCell,
 } from "../../Components/ui/table";
-// import EditExpenseForm from "./EditExpenseForm"; // Import the form
-import EditExpenseForm from "../EditForms/EditExpenseForm";
+// import EditincomeForm from "./EditincomeForm"; // Import the form
+import EditincomeForm from "../EditForms/EditincomeForm";
+import EditIncomeForm from "../EditForms/EditIncomeForm";
 
-const ExpenseTable = () => {
-  const [expenses, setExpenses] = useState([]);
+const IncomeTable = () => {
+  const [income, setIncome] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingExpense, setEditingExpense] = useState(null);
+  const [editingIncome, setEditingIncome] = useState(null);
   const navigate = useNavigate(); // React Router navigation
 
-  // Fetch expenses from API
+  // Fetch incomes from API
   useEffect(() => {
-    fetchExpenses();
+    fetchIncome();
   }, []);
 
-  const fetchExpenses = async () => {
+  const fetchIncome = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/expenses");
-      setExpenses(response.data);
+      const response = await axios.get("http://localhost:8080/api/income");
+      setIncome(response.data);
     } catch (error) {
-      console.error("Error fetching expenses:", error);
+      console.error("Error fetching incomes:", error);
     }
   };
 
-  // Handle Delete Expense
+  // Handle Delete income
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/api/expenses/${id}`);
-      fetchExpenses(); // Refresh data
+      await axios.delete(`http://localhost:8080/api/income/${id}`);
+      fetchIncome(); // Refresh data
     } catch (error) {
-      console.error("Error deleting expense:", error);
+      console.error("Error deleting income:", error);
     }
   };
 
-  // Handle Edit Expense
-  const handleEdit = (expense) => {
-    setEditingExpense(expense);
+  // Handle Edit income
+  const handleEdit = (income) => {
+    setEditingIncome(income);
     setIsEditing(true);
   };
 
   // Close Edit Form after Updating
   const handleCloseEdit = () => {
     setIsEditing(false);
-    setEditingExpense(null);
-    fetchExpenses(); // Refresh data after update
+    setEditingIncome(null);
+    fetchIncome(); // Refresh data after update
   };
 
   return (
     <>
       {isEditing ? (
-        <EditExpenseForm expense={editingExpense} onClose={handleCloseEdit} />
+        <EditincomeForm income={editingIncome} onClose={handleCloseEdit} />
       ) : (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg dark:text-gray-800 rounded-lg w-full overflow-hidden rounded-xl border border-gray-200 dark:border-white/[0.05]">
           <h2 className="text-2xl font-bold mb-4 pb-4 text-gray-800 dark:text-gray-800">
-          Overall Expense
+            Overall Income
           </h2>
           <Table className="w-full text-sm text-left rtl:text-right">
             <TableHeader className="dark:bg-[#ffff] text-xs text-gray-700 uppercase bg-gray-50 dark:text-[#ffff]">
@@ -78,32 +79,32 @@ const ExpenseTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {expenses.length > 0 ? (
-                expenses.map((expense) => (
+              {income.length > 0 ? (
+                income.map((income) => (
                   <TableRow
-                    key={expense._id}
+                    key={income._id}
                     className="border-b hover:bg-gray-200 dark:hover:bg-blue-700"
                   >
-                    <TableCell>{expense.title}</TableCell>
-                    <TableCell>{expense.category}</TableCell>
+                    <TableCell>{income.title}</TableCell>
+                    <TableCell>{income.category}</TableCell>
                     <TableCell className="text-right">
-                      ₹{expense.amount.toFixed(2)}
+                      ₹{income.amount.toFixed(2)}
                     </TableCell>
-                    <TableCell>{expense.account}</TableCell>
+                    <TableCell>{income.account}</TableCell>
                     <TableCell>
-                      {new Date(expense.date).toLocaleDateString()}
+                      {new Date(income.date).toLocaleDateString()}
                     </TableCell>
-                    <TableCell>{expense.time}</TableCell>
-                    <TableCell>{expense.note || "-- Not Added --"}</TableCell>
+                    <TableCell>{income.time}</TableCell>
+                    <TableCell>{income.note || "-- Not Added --"}</TableCell>
                     <TableCell>
                       <button
-                        onClick={() => handleEdit(expense)}
+                        onClick={() => handleEdit(income)}
                         className="mr-2 px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                       >
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(expense.id)}
+                        onClick={() => handleDelete(income.id)}
                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                       >
                         Delete
@@ -114,7 +115,7 @@ const ExpenseTable = () => {
               ) : (
                 <TableRow>
                   <TableCell colSpan="8" className="text-center py-4">
-                    No expenses found.
+                    No incomes found.
                   </TableCell>
                 </TableRow>
               )}
@@ -126,4 +127,4 @@ const ExpenseTable = () => {
   );
 };
 
-export default ExpenseTable;
+export default IncomeTable;

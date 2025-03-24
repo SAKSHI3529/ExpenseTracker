@@ -45,16 +45,16 @@ const Form = ({ initialFormData, title, fields, onSubmit }) => {
   return (
     <>
       {alert.show && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ show: false })} />}
-      <div className="p-10 bg-#1e1e1e8a dark:bg-[#FFFFFF] dark:text-gray-800 shadow-md rounded-lg lg:w-[700px] rounded-2xl border border-gray-200 bg-white dark:border-gray-800">
+      <div className="p-10   dark:text-gray-100 shadow-md rounded-lg lg:w-[700px] rounded-2xl border border-gray-200 bg-gray-800 dark:border-gray-800 ">
        <div className=" py-5">
-        <h2 className="font-bold text-2xl dark:text-gray-800 mb-4">{title}</h2>
+        <h2 className="font-bold text-2xl dark:text-white mb-4">{title}</h2>
         </div>
         <form onSubmit={handleSubmit}>
           {fields.map((field) => (
             <div key={field.name} className="flex flex-col mb-4">
               <label className="text-base mb-1 ">{field.label}</label>
               {field.type === "select" ? (
-                <select name={field.name} value={formData[field.name]} onChange={handleChange} required className="w-full p-2 border rounded">
+                <select name={field.name} value={formData[field.name]} onChange={handleChange} required className="w-full p-2 border rounded hover:bg-gray-600">
                   <option value="">Select {field.label}</option>
                   {field.options.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -65,7 +65,7 @@ const Form = ({ initialFormData, title, fields, onSubmit }) => {
               )}
             </div>
           ))}
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 transition">{title}</button>
+          <button type="submit" className="bg-blue-300 text-white px-4 py-2 rounded w-full hover:bg-blue-500 transition">{title}</button>
         </form>
       </div>
     </>

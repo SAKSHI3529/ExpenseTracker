@@ -56,10 +56,10 @@ const IncomeForm = () => {
         return;
       }
 
-      await axios.post("http://localhost:8080/api/incomes", dataToSubmit);
+      await axios.post("http://localhost:8080/api/income", dataToSubmit);
       console.log("Income added successfully!");
     } catch (error) {
-      console.log("Failed to add income.");
+      console.log("Failed to add income.", error);
     }
   };
 

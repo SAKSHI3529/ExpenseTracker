@@ -1,8 +1,23 @@
 import axios from "axios";
 // import ReusableForm from "../components/ReusableForm";
 import Form from "../ui/Form";
+import { useState, useEffect } from "react";
 
 const ExpenseForm = () => {
+  const [accounts, setAccounts] = useState([]);
+
+  useEffect(() => {
+      fetchAccounts();
+    }, []);
+  const fetchAccounts = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/account"); // Adjust API URL if needed
+      setAccounts(response.data);
+    } catch (error) {
+      console.error("Error fetching accounts:", error);
+    }
+  };
+
   const initialFormData = {
     title: "",
     amount: "",
@@ -34,13 +49,13 @@ const ExpenseForm = () => {
       name: "account",
       label: "Account",
       type: "select",
-      options: [
-        { value: "cash", label: "Cash" },
-        { value: "card", label: "Card" },
-        { value: "saving", label: "Saving" },
-        { value: "untitled", label: "Untitled" },
-      ],
-    },
+      options: accounts.length > 0
+      ? accounts.map((account) => ({
+          value: account.id, // ✅ Use account ID as value
+          label: account.name, // ✅ Display account name
+        }))
+      : [{ value: "", label: "No accounts added" }], // ✅ Show message if no accounts exist
+  },
     { name: "note", label: "Note (Optional)", type: "text", placeholder: "Enter Note (optional)" },
   ];
 

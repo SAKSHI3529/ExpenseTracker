@@ -26,13 +26,18 @@ import SetBudgetForm from "../Forms/SetBudgetForm";
 import AddAccountForm from "../Forms/AddAccountForm";
 import SetGoalForm from "../Forms/SetGoalForm";
 import ExpenseTable from "../Tables/ExpenseTable";
-import EditExpenseForm from "../Forms/EditExpenseForm";
+import EditExpenseForm from "../EditForms/EditExpenseForm";
 import Navbar from "./Navbar";
 import AccountCard from "../Tables/AccountCard";
+import IncomeTable from "../Tables/IncomeTable";
+
+
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [editingExpense, setEditingExpense] = useState(null); // Track which expense is being edited
+  const [editingExpense, setEditingExpense] = useState(null);
+  const [editingIncome, setEditingIncome] = useState(null); // Track which expense is being edited
+  const [isFormOpen, setIsFormOpen] = useState(null);
 
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
@@ -56,6 +61,27 @@ const Dashboard = () => {
           expense={editingExpense}
           onClose={() => setEditingExpense(null)}
         />
+
+      );   
+    }
+
+    if (editingIncome) {
+      return (
+        <EditIncomeForm
+          income={editingIncome}
+          onClose={() => setEditingIncome(null)}
+        />
+        
+      );
+    }
+
+    if (isFormOpen) {
+      return (
+        <AddAccountForm
+          income={isFormOpen}
+          onClose={() => setIsFormOpen(null)}
+        />
+        
       );
     }
     switch (selectedComponent) {
@@ -66,15 +92,18 @@ const Dashboard = () => {
       case "budget":
         return <SetBudgetForm />;
       case "account":
-        return <AccountCard />;
+        return <AccountCard onClick={setIsFormOpen}/>;
       case "goals":
         return <SetGoalForm />;
 
-        case "home":
-          return <Main/>;
+      case "home":
+        return <Main />;
 
       case "expenseTable": // ✅ Added case for ExpenseTable
         return <ExpenseTable onEdit={setEditingExpense} />;
+
+        case "incomeTable": // ✅ Added case for ExpenseTable
+        return <IncomeTable onEdit={setEditingIncome} />;
       default:
         return <Main />;
     }
@@ -92,7 +121,7 @@ const Dashboard = () => {
     { icon: FaDatabase, text: "Dashboard", action: "home" },
     { icon: FaDatabase, text: "Accounts", action: "account" },
     { icon: FaArrowUp, text: "Expenses", action: "expenseTable" }, // ✅ Clicking this shows ExpenseTable
-    { icon: FaArrowDown, text: "Incomes", action: "income" },
+    { icon: FaArrowDown, text: "Incomes", action: "incomeTable" },
     { icon: FaList, text: "Categories", action: "categories" },
     { icon: FaPiggyBank, text: "Savings Goals", action: "goals" },
     { icon: FaChartPie, text: "Charts", action: "charts" },
@@ -131,7 +160,7 @@ const Dashboard = () => {
         </div>
       </nav> */}
 
-  <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} /> 
+      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
       {/* HOME IMAGE */}
 
@@ -150,7 +179,7 @@ const Dashboard = () => {
           <button
             key={index}
             onClick={() => setSelectedComponent(btn.action)}
-            className="flex items-center gap-2 px-4 py-2 border border-[#17153B] rounded-lg hover:bg-[#9CB9FF] hover:text-black transition"
+            className="flex items-center gap-2 px-4 py-2 border border-[#17153B] rounded-lg hover:bg-gray-300 hover:text-black transition"
           >
             {React.createElement(btn.icon)}
             {btn.text}
@@ -181,13 +210,14 @@ const Dashboard = () => {
             {sidebarItems.map((item, index) => (
               <li
                 key={index}
-                className="flex items-center gap-3 hover:bg-[#9CB9FF] p-2 rounded-md cursor-pointer"
+                className="flex items-center gap-3 hover:bg-gray-300 p-2 rounded-md cursor-pointer"
               >
                 <button
-                  onClick={() =>{ setSelectedComponent(item.action);
-                    setSidebarOpen(false);  }}
-                  
-                  className="flex items-center gap-3 w-full dark:text-[#17153B] hover:bg-[#9CB9FF]"
+                  onClick={() => {
+                    setSelectedComponent(item.action);
+                    setSidebarOpen(false);
+                  }}
+                  className="flex items-center gap-3 w-full dark:text-[#17153B] hover:bg-gray-300"
                 >
                   {React.createElement(item.icon)}
                   {item.text}
@@ -208,7 +238,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </> 
+    </>
   );
 };
 
