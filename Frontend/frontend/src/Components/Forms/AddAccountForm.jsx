@@ -1,11 +1,4 @@
 import { useState } from "react";
-import {
-  FaMoneyBillWave,
-  FaCreditCard,
-  FaPiggyBank,
-  FaCcMastercard,
-  FaCcVisa,
-} from "react-icons/fa";
 import { assets } from "../../assets/assets";
 
 const iconMap = {

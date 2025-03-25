@@ -4,6 +4,7 @@ import { FaEllipsisH } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
 import AddAccountForm from "../Forms/AddAccountForm";
 import EditAccount from "../EditForms/EditAccount";
+import Alert from "../ui/Alert";
 
 const AccountCard = () => {
   const [accounts, setAccounts] = useState([]);
@@ -11,6 +12,16 @@ const AccountCard = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
+  const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+
+  useEffect(() => {
+    if (alert.show) {
+      const timer = setTimeout(() => {
+        setAlert({ show: false, type: "", message: "" });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [alert.show]);
 
   useEffect(() => {
     fetchAccounts();
@@ -58,9 +69,11 @@ const AccountCard = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/api/account/${id}`);
+      setAlert({ show: true, type: "success", message: `Account deleted successfully!` });
       setAccounts(accounts.filter(account => account.id !== id)); // Update UI
     } catch (error) {
       console.error("Error deleting account:", error);
+      setAlert({ show: true, type: "error", message: `Fail to delete Account!` });
     }
   };
 
@@ -77,6 +90,7 @@ const AccountCard = () => {
   };
   return (
     <>
+    {alert.show && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ show: false })} />}
       {isEditing ? (
         <EditAccount 
         account={editingAccount} 

@@ -30,6 +30,8 @@ import EditExpenseForm from "../EditForms/EditExpenseForm";
 import Navbar from "./Navbar";
 import AccountCard from "../Tables/AccountCard";
 import IncomeTable from "../Tables/IncomeTable";
+import Category from "../Tables/Category";
+import CategorySection from "../Tables/CategorySection";
 
 
 
@@ -99,6 +101,9 @@ const Dashboard = () => {
       case "home":
         return <Main />;
 
+        case "category":
+          return <CategorySection />;
+
       case "expenseTable": // ✅ Added case for ExpenseTable
         return <ExpenseTable onEdit={setEditingExpense} />;
 
@@ -122,7 +127,7 @@ const Dashboard = () => {
     { icon: FaDatabase, text: "Accounts", action: "account" },
     { icon: FaArrowUp, text: "Expenses", action: "expenseTable" }, // ✅ Clicking this shows ExpenseTable
     { icon: FaArrowDown, text: "Incomes", action: "incomeTable" },
-    { icon: FaList, text: "Categories", action: "categories" },
+    { icon: FaList, text: "Categories", action: "category" },
     { icon: FaPiggyBank, text: "Savings Goals", action: "goals" },
     { icon: FaChartPie, text: "Charts", action: "charts" },
     { icon: FaMoneyBill, text: "Budgets", action: "budget" },

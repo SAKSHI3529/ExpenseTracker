@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import axios from "axios";
 import { assets } from "../../assets/assets"; // Ensure correct import
+import Alert from "../ui/Alert";
 
 const iconMap = {
     money: assets.cash_img,
@@ -16,7 +17,21 @@ const EditAccount = ({ account, onClose, onUpdateAccount }) => {
     amount: account.amount,
     icon: account.icon,
   });
+  const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+  
+    // Automatically hide alert after 10 seconds
+    useEffect(() => {
+      if (alert.show) {
+        const timer = setTimeout(() => setAlert({ show: false }), 10000);
+        return () => clearTimeout(timer);
+      }
+    }, [alert.show]);
 
+    useEffect(() => {
+      if (account) {
+        setFormData(account);
+      }
+    }, [account]);
   // ✅ Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,15 +40,25 @@ const EditAccount = ({ account, onClose, onUpdateAccount }) => {
         `http://localhost:8080/api/account/${account.id}`,
         formData
       );
-      onUpdateAccount(response.data); // ✅ Update UI
-      onClose(); // ✅ Close modal after update
+      // onUpdateAccount(response.data); // ✅ Update UI
+      setAlert({ show: true, type: "success", message: "Account updated successfully!" });
+      setTimeout(() => {
+        onUpdateAccount(response.data);
+        onClose(); // ✅ Closes form after update
+      }, 1000);
+      // onClose(); // ✅ Close modal after update
     } catch (error) {
       console.error("Error updating account:", error);
+      setAlert({ show: true, type: "error", message: "Failed to update Account." });
     }
   };
 
   return (
+    <>
+        
+    
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-30 backdrop-blur-md">
+  
       <div className="bg-gray-800 bg-opacity-40 border border-gray-500 p-6 rounded-2xl shadow-xl w-96">
         <h2 className="text-2xl font-bold text-center text-yellow-300 mb-4">
           Edit Account
@@ -105,9 +130,17 @@ const EditAccount = ({ account, onClose, onUpdateAccount }) => {
               UPDATE
             </button>
           </div>
+          {alert.show && (
+          <Alert
+            variant={alert.type} // ✅ Use `variant` instead of `type` if needed
+            message={alert.message}
+            onClose={() => setAlert({ show: false })}
+          />
+        )}
         </form>
       </div>
     </div>
+    </>
   );
 };
 
