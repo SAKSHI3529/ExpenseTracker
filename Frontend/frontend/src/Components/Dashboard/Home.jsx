@@ -102,7 +102,7 @@ const Dashboard = () => {
         return <Main />;
 
         case "category":
-          return <CategorySection />;
+          return <Category />;
 
       case "expenseTable": // ✅ Added case for ExpenseTable
         return <ExpenseTable onEdit={setEditingExpense} />;

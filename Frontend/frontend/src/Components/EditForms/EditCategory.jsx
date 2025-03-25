@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaMoneyBill, FaHome, FaUtensils, FaShoppingCart, FaFilm, FaHeartbeat, FaCheckCircle } from "react-icons/fa";
 
-// ✅ Icon mapping
+// ✅ Icon Mapping
 const iconOptions = {
   FaMoneyBill: <FaMoneyBill size={24} />,
   FaHome: <FaHome size={24} />,
@@ -13,32 +13,69 @@ const iconOptions = {
   FaCheckCircle: <FaCheckCircle size={24} />,
 };
 
-const AddCategory = ({ onClose, onCategoryAdded }) => {
+const EditCategory = ({ category, onClose, onCategoryUpdated }) => {
   const [formData, setFormData] = useState({
-    name: "Untitled",
-    type: "income", // Default type
-    icon: "FaMoneyBill", // Default icon name
+    name: "",
+    type: "",
+    icon: "",
   });
 
-  // ✅ Fix handleSubmit to send data to backend
+  // ✅ Load selected category data
+  useEffect(() => {
+    if (category) {
+      setFormData({
+        name: category.name,
+        type: category.type,
+        icon: category.icon,
+      });
+    }
+  }, [category]);
+
+  // ✅ Handle Input Change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // ✅ Handle Icon Selection
+  const handleIconSelect = (icon) => {
+    setFormData({ ...formData, icon });
+  };
+
+  // ✅ Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/categories", formData);
-      // console.log("✅ Category Added:", response.data); // Debugging log
-      onCategoryAdded(response.data); // ✅ Update UI
-      onClose(); // ✅ Close modal
+      const response = await axios.put(
+        `http://localhost:8080/api/categories/${category.id}`,
+        formData
+      );
+      console.log("✅ Category Updated:", response.data);
+      onCategoryUpdated(response.data); // ✅ Update the UI
+      onClose(); // ✅ Close modal after update
     } catch (error) {
-      console.error("❌ Error adding category:", error);
+      console.error("❌ Error updating category:", error);
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-md">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-md">
       <div className="bg-gray-800 border border-gray-600 p-6 rounded-xl shadow-xl w-96">
-        <h2 className="text-2xl font-bold text-center text-yellow-300 mb-4">Add New Category</h2>
+        <h2 className="text-2xl font-bold text-center text-yellow-300 mb-4">Edit Category</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Category Name */}
+          <div>
+            <label className="block text-sm text-yellow-400 mb-1">Category Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-2 bg-gray-900 text-yellow-300 border border-gray-600 rounded-lg"
+              required
+            />
+          </div>
+
           {/* Type Selection */}
           <div className="flex justify-between p-2 bg-gray-700 border border-gray-500 rounded-lg">
             <button
@@ -57,28 +94,16 @@ const AddCategory = ({ onClose, onCategoryAdded }) => {
             </button>
           </div>
 
-          {/* Category Name */}
-          <div>
-            <label className="block text-sm text-yellow-400 mb-1">Name</label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full p-2 bg-gray-900 text-yellow-300 border border-gray-600 rounded-lg"
-              required
-            />
-          </div>
-
           {/* Icon Selection */}
           <div>
-            <label className="block text-sm text-yellow-400 mb-1">Icon</label>
+            <label className="block text-sm text-yellow-400 mb-1">Choose an Icon</label>
             <div className="grid grid-cols-4 gap-3 p-2 bg-gray-900 border border-gray-600 rounded-lg">
               {Object.keys(iconOptions).map((iconName) => (
                 <button
                   key={iconName}
                   type="button"
                   className={`p-2 rounded-lg ${formData.icon === iconName ? "bg-yellow-500" : "bg-gray-700"} hover:bg-yellow-400`}
-                  onClick={() => setFormData({ ...formData, icon: iconName })} // ✅ Store icon name
+                  onClick={() => handleIconSelect(iconName)}
                 >
                   {iconOptions[iconName]}
                 </button>
@@ -88,11 +113,18 @@ const AddCategory = ({ onClose, onCategoryAdded }) => {
 
           {/* Buttons */}
           <div className="grid grid-cols-2 gap-2 mt-4">
-            <button type="button" onClick={onClose} className="bg-gray-700 p-2 rounded-lg text-white hover:bg-gray-600">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-gray-700 p-2 rounded-lg text-white hover:bg-gray-600"
+            >
               CANCEL
             </button>
-            <button type="submit" className="bg-yellow-500 p-2 rounded-lg text-gray-900 font-bold hover:bg-yellow-400">
-              SAVE
+            <button
+              type="submit"
+              className="bg-yellow-500 p-2 rounded-lg text-gray-900 font-bold hover:bg-yellow-400"
+            >
+              UPDATE
             </button>
           </div>
         </form>
@@ -101,4 +133,4 @@ const AddCategory = ({ onClose, onCategoryAdded }) => {
   );
 };
 
-export default AddCategory;
+export default EditCategory;
