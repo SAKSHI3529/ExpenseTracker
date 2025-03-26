@@ -2,6 +2,8 @@ package com.example.TrackMyWallet.Entity;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
+
 public class Account {
 
     @Id
@@ -9,6 +11,7 @@ public class Account {
     private double amount;
     private String name;
     private String icon;
+//    private List<Transaction> transactions = new ArrayList<>();
 
     public Account() {}
 
@@ -16,6 +19,7 @@ public class Account {
         this.amount = amount;
         this.name = name;
         this.icon = icon;
+
     }
 
     public String getId() {

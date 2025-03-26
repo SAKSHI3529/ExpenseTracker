@@ -30,7 +30,10 @@ const AccountCard = () => {
   useEffect(() => {
     // Function to close dropdown when clicking outside
     const handleClickOutside = (event) => {
-      if (dropdownOpen !== null && !event.target.closest(".dropdown-container")) {
+      if (
+        dropdownOpen !== null &&
+        !event.target.closest(".dropdown-container")
+      ) {
         setDropdownOpen(null);
       }
     };
@@ -57,7 +60,10 @@ const AccountCard = () => {
   // Add a new account to the database
   const addAccountToDB = async (newAccount) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/account", newAccount);
+      const response = await axios.post(
+        "http://localhost:8080/api/account",
+        newAccount
+      );
       setAccounts([...accounts, response.data]); // Update UI with new account
       setIsFormOpen(false); // Close modal after adding
     } catch (error) {
@@ -69,11 +75,19 @@ const AccountCard = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/api/account/${id}`);
-      setAlert({ show: true, type: "success", message: `Account deleted successfully!` });
-      setAccounts(accounts.filter(account => account.id !== id)); // Update UI
+      setAlert({
+        show: true,
+        type: "success",
+        message: `Account deleted successfully!`,
+      });
+      setAccounts(accounts.filter((account) => account.id !== id)); // Update UI
     } catch (error) {
       console.error("Error deleting account:", error);
-      setAlert({ show: true, type: "error", message: `Fail to delete Account!` });
+      setAlert({
+        show: true,
+        type: "error",
+        message: `Fail to delete Account!`,
+      });
     }
   };
 
@@ -84,19 +98,26 @@ const AccountCard = () => {
 
   const handleUpdateAccount = (updatedAccount) => {
     setAccounts(
-      accounts.map((acc) => (acc.id === updatedAccount.id ? updatedAccount : acc))
+      accounts.map((acc) =>
+        acc.id === updatedAccount.id ? updatedAccount : acc
+      )
     );
     setIsEditing(false);
   };
   return (
     <>
-    {alert.show && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ show: false })} />}
+      {alert.show && (
+        <Alert
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert({ show: false })}
+        />
+      )}
       {isEditing ? (
-        <EditAccount 
-        account={editingAccount} 
-        onClose={() => setIsEditing(false)}
-          onUpdateAccount={handleUpdateAccount} 
-        
+        <EditAccount
+          account={editingAccount}
+          onClose={() => setIsEditing(false)}
+          onUpdateAccount={handleUpdateAccount}
         />
       ) : (
         <div className="p-4">
@@ -120,10 +141,13 @@ const AccountCard = () => {
                     <div>
                       <h3 className="text-lg font-semibold">{account.name}</h3>
                       <p className="text-green-400">
-                        Balance: ₹{account.amount ? account.amount.toFixed(2) : "0.00"}
+                        Balance: ₹
+                        {account.amount ? account.amount.toFixed(2) : "0.00"}
                       </p>
                     </div>
                   </div>
+
+                
 
                   <div className="relative dropdown-container">
                     <FaEllipsisH
@@ -170,7 +194,10 @@ const AccountCard = () => {
           {/* ✅ Fix: Add Account Modal */}
           {isFormOpen && (
             <div className="fixed inset-0 flex items-center bg-opacity-30 backdrop-blur-md z-50">
-              <AddAccountForm onClose={() => setIsFormOpen(false)} onAddAccount={addAccountToDB} />
+              <AddAccountForm
+                onClose={() => setIsFormOpen(false)}
+                onAddAccount={addAccountToDB}
+              />
             </div>
           )}
         </div>
@@ -180,4 +207,3 @@ const AccountCard = () => {
 };
 
 export default AccountCard;
-

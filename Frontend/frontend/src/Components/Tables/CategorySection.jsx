@@ -4,7 +4,7 @@ import { useState , useEffect } from "react";
 import AddCategory from "../Forms/AddCategory";
 import axios from "axios";
 // import EditCategory from "../EditForms/EditCategory";
-import {  } from "module";
+// import {  } from "module";
 
 const CategorySection = ({ title, categories = [] , setCategories = [],iconMap  }) => {  // ✅ Default to empty array
   // const [isFormOpen, setIsFormOpen] = useState(false);

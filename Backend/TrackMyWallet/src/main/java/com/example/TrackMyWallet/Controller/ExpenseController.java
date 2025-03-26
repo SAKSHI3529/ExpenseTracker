@@ -4,6 +4,7 @@ package com.example.TrackMyWallet.Controller;
 import com.example.TrackMyWallet.Entity.Expense;
 import com.example.TrackMyWallet.Service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +24,24 @@ public class ExpenseController {
     private ExpenseService expenseService;
 
     // Add a New Expense
+//    @PostMapping
+//    public Expense createExpense(@RequestBody Expense expense) {
+//        System.out.println("Received API Request: " + expense); // ✅ Debug log to verify incoming data
+//        return expenseService.addExpense(expense);
+//    }
+
     @PostMapping
-    public Expense createExpense(@RequestBody Expense expense) {
-        System.out.println("Received API Request: " + expense); // ✅ Debug log to verify incoming data
-        return expenseService.addExpense(expense);
+    public ResponseEntity<?> addExpense(@RequestBody Expense expense) {
+        try {
+            System.out.println("Received Expense: " + expense); // ✅ Debug Log
+            Expense savedExpense = expenseService.addExpense(expense);
+            return ResponseEntity.ok(savedExpense);
+        } catch (Exception e) {
+            System.err.println("❌ Error Adding Expense: " + e.getMessage()); // ✅ Print error details
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add expense: " + e.getMessage());
+        }
     }
+
 
     // Get All Expenses
     @GetMapping
@@ -77,11 +91,15 @@ public class ExpenseController {
 
 
 
+
     // Delete an Expense
     @DeleteMapping("/{id}")
     public String deleteExpense(@PathVariable("id") String id) {
         expenseService.deleteExpense(id);
         return "Expense deleted successfully!";
     }
+
+
+
 
 }

@@ -23,7 +23,9 @@ public class AccountService {
     }
 
     public List<Account> getAllAccounts() {
-        return accountRepo.findAll();
+        List<Account> accounts = accountRepo.findAll();
+        System.out.println("🔍 All Accounts: " + accounts);
+        return accounts;
     }
 
     // Get account by ID

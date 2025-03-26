@@ -30,10 +30,10 @@ import EditExpenseForm from "../EditForms/EditExpenseForm";
 import Navbar from "./Navbar";
 import AccountCard from "../Tables/AccountCard";
 import IncomeTable from "../Tables/IncomeTable";
-import Category from "../Tables/Category";
+import Category from "../ui/Category";
 import CategorySection from "../Tables/CategorySection";
-
-
+import BudgetCard from "../Tables/BudgetCard";
+import Budget from "../ui/Budget";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -63,8 +63,7 @@ const Dashboard = () => {
           expense={editingExpense}
           onClose={() => setEditingExpense(null)}
         />
-
-      );   
+      );
     }
 
     if (editingIncome) {
@@ -73,7 +72,6 @@ const Dashboard = () => {
           income={editingIncome}
           onClose={() => setEditingIncome(null)}
         />
-        
       );
     }
 
@@ -83,7 +81,6 @@ const Dashboard = () => {
           income={isFormOpen}
           onClose={() => setIsFormOpen(null)}
         />
-        
       );
     }
     switch (selectedComponent) {
@@ -94,20 +91,23 @@ const Dashboard = () => {
       case "budget":
         return <SetBudgetForm />;
       case "account":
-        return <AccountCard onClick={setIsFormOpen}/>;
+        return <AccountCard onClick={setIsFormOpen} />;
       case "goals":
         return <SetGoalForm />;
 
       case "home":
         return <Main />;
 
-        case "category":
-          return <Category />;
+      case "category":
+        return <Category />;
+
+      case "budgetCard":
+        return <Budget />;
 
       case "expenseTable": // ✅ Added case for ExpenseTable
         return <ExpenseTable onEdit={setEditingExpense} />;
 
-        case "incomeTable": // ✅ Added case for ExpenseTable
+      case "incomeTable": // ✅ Added case for ExpenseTable
         return <IncomeTable onEdit={setEditingIncome} />;
       default:
         return <Main />;
@@ -130,7 +130,7 @@ const Dashboard = () => {
     { icon: FaList, text: "Categories", action: "category" },
     { icon: FaPiggyBank, text: "Savings Goals", action: "goals" },
     { icon: FaChartPie, text: "Charts", action: "charts" },
-    { icon: FaMoneyBill, text: "Budgets", action: "budget" },
+    { icon: FaMoneyBill, text: "Budgets", action: "budgetCard" },
     { icon: FaCalendarAlt, text: "Monthly Summary", action: "summary" },
   ];
 

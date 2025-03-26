@@ -44,7 +44,7 @@ const Form = ({ initialFormData, title, fields, onSubmit }) => {
 
   return (
     <>
-      {alert.show && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ show: false })} />}
+      {/* {alert.show && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ show: false })} />} */}
       <div className="p-10   dark:text-gray-100 shadow-md rounded-lg lg:w-[700px] rounded-2xl border border-gray-200 bg-gray-800 dark:border-gray-800 ">
        <div className=" py-5">
         <h2 className="font-bold text-2xl dark:text-white mb-4">{title}</h2>
@@ -57,7 +57,7 @@ const Form = ({ initialFormData, title, fields, onSubmit }) => {
                 <select name={field.name} value={formData[field.name]} onChange={handleChange} required className="w-full p-2 border rounded hover:bg-gray-600">
                   <option value="">Select {field.label}</option>
                   {field.options.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                    <option key={option.value} value={option.value} className="">{option.label} &nbsp;&nbsp;  {option.amt}</option>
                   ))}
                 </select>
               ) : (
