@@ -24,23 +24,25 @@ public class Income {
     private LocalDate date;     // Date of the expense
     private LocalTime time;     // Time of the expense
     private String category;    // Category of the expense (e.g., "Food", "Rent")
-    private String account;     // Account used (e.g., "Bank", "Cash", "Credit Card")
+    private String account;
+    private String accountId;// Account used (e.g., "Bank", "Cash", "Credit Card")
     private String note;        // Additional details about the expense
 
     // ✅ Constructor to Ensure Proper Initialization
-    public Income(String title, Double amount, LocalDate date, LocalTime time, String category, String account, String note) {
+    public Income(String title, Double amount, LocalDate date, LocalTime time, String category, String account,String accountId, String note) {
         this.title = title;
         this.amount = amount;
         this.date = date;
         this.time = time;
         this.category = category;
         this.account = account;
+        this.accountId =accountId;
         this.note = note;
     }
 
-    public Income(){
-
-    }
+//    public Income(){
+//
+//    }
 
     public String getId() {
         return id;
@@ -96,6 +98,14 @@ public class Income {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public String getNote() {

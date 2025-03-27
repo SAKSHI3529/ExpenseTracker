@@ -24,14 +24,46 @@ const IncomeTable = () => {
     fetchIncome();
   }, []);
 
+  // const fetchIncome = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:8080/api/income");
+  //     setIncome(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching incomes:", error);
+  //   }
+  // };
+
   const fetchIncome = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/income");
-      setIncome(response.data);
+      const [incomeResponse, categoriesResponse, accountsResponse] = await Promise.all([
+        axios.get("http://localhost:8080/api/income"),
+        axios.get("http://localhost:8080/api/categories"),
+        axios.get("http://localhost:8080/api/account"),
+      ]);
+  
+      const categories = categoriesResponse.data.reduce((acc, category) => {
+        acc[category.id] = category.name; // Store category ID -> Name mapping
+        return acc;
+      }, {});
+  
+      const accounts = accountsResponse.data.reduce((acc, account) => {
+        acc[account.id] = account.name; // Store account ID -> Name mapping
+        return acc;
+      }, {});
+  
+      // Map category and account names instead of IDs
+      const updatedIncome = incomeResponse.data.map((income) => ({
+        ...income,
+        category: categories[income.category] || "Unknown Category",
+        account: accounts[income.account] || "Unknown Account",
+      }));
+  
+      setIncome(updatedIncome);
     } catch (error) {
-      console.error("Error fetching incomes:", error);
+      console.error("Error fetching expenses:", error);
     }
   };
+  
 
   // Handle Delete income
   const handleDelete = async (id) => {

@@ -1,7 +1,9 @@
 package com.example.TrackMyWallet.Service;
 
+import com.example.TrackMyWallet.Entity.Account;
 import com.example.TrackMyWallet.Entity.Expense;
 import com.example.TrackMyWallet.Entity.Income;
+import com.example.TrackMyWallet.Repository.AccountRepo;
 import com.example.TrackMyWallet.Repository.ExpenseRepo;
 import com.example.TrackMyWallet.Repository.IncomeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +17,42 @@ public class IncomeService {
     @Autowired
     private IncomeRepo incomeRepo;
 
+    @Autowired
+    private AccountRepo accountRepo;
+
     // Create an Income
+//    public Income addIncome(Income income) {
+//        System.out.println("Saving Expense: " + income); // ✅ Debug log to verify data before saving
+//        return incomeRepo.save(income);
+//    }
+
     public Income addIncome(Income income) {
-        System.out.println("Saving Expense: " + income); // ✅ Debug log to verify data before saving
-        return incomeRepo.save(income);
+        try {
+            Optional<Account> accountOpt = accountRepo.findById(income.getAccount());
+
+            if (accountOpt.isPresent()) {
+                Account account = accountOpt.get();
+
+                // ✅ Check balance before adding expense
+//                if (account.getAmount() < income.getAmount()) {
+//                    throw new RuntimeException("Insufficient balance! Available: ₹" + account.getAmount() + ", Required: ₹" + expense.getAmount());
+//                }
+
+                // ✅ Deduct from account balance
+                account.setAmount(account.getAmount() + income.getAmount());
+                accountRepo.save(account);
+
+                // ✅ Save expense
+                return incomeRepo.save(income);
+            } else {
+                throw new RuntimeException("❌ Account not found: " + income.getAccount());
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Error Adding Income: " + e.getMessage());  // ✅ Print error in logs
+            throw new RuntimeException("Failed to add Income: " + e.getMessage());
+        }
     }
+
 
     // Get All Income
     public List<Income> getAllIncome() {

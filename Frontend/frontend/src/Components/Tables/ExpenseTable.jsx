@@ -23,14 +23,46 @@ const ExpenseTable = () => {
     fetchExpenses();
   }, []);
 
+  // const fetchExpenses = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:8080/api/expenses");
+  //     setExpenses(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching expenses:", error);
+  //   }
+  // };
+
   const fetchExpenses = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/expenses");
-      setExpenses(response.data);
+      const [expensesResponse, categoriesResponse, accountsResponse] = await Promise.all([
+        axios.get("http://localhost:8080/api/expenses"),
+        axios.get("http://localhost:8080/api/categories"),
+        axios.get("http://localhost:8080/api/account"),
+      ]);
+  
+      const categories = categoriesResponse.data.reduce((acc, category) => {
+        acc[category.id] = category.name; // Store category ID -> Name mapping
+        return acc;
+      }, {});
+  
+      const accounts = accountsResponse.data.reduce((acc, account) => {
+        acc[account.id] = account.name; // Store account ID -> Name mapping
+        return acc;
+      }, {});
+  
+      // Map category and account names instead of IDs
+      const updatedExpenses = expensesResponse.data.map((expense) => ({
+        ...expense,
+        category: categories[expense.category] || "Unknown Category",
+        account: accounts[expense.account] || "Unknown Account",
+      }));
+  
+      setExpenses(updatedExpenses);
     } catch (error) {
       console.error("Error fetching expenses:", error);
     }
   };
+  
 
   // Handle Delete Expense
   const handleDelete = async (id) => {

@@ -53,8 +53,8 @@ const IncomeForm = () => {
       type: "select",
       options: categories.length > 0
       ? categories.map((category) => ({
-          value: category.id, // ✅ Use category ID as value
-          label: category.name, // ✅ Display category name
+          value: category.id, 
+          label: category.name, 
         }))
       : [{ value: "", label: "No categories added" }], // ✅ Show message if no categories exist
   },
@@ -64,8 +64,9 @@ const IncomeForm = () => {
       type: "select",
       options: accounts.length > 0
       ? accounts.map((account) => ({
-          value: account.id, // ✅ Use account ID as value
-          label: account.name, // ✅ Display account name
+          value: account.id, 
+          label: account.name,
+          amt:account.ammount ,
         }))
       : [{ value: "", label: "No accounts added" }], // ✅ Show message if no accounts exist
   },
@@ -77,7 +78,10 @@ const IncomeForm = () => {
       const dataToSubmit = {
         ...formData,
         amount: parseFloat(formData.amount),
+        account: formData.account,
       };
+
+      
   
       if (isNaN(dataToSubmit.amount) || dataToSubmit.amount <= 0) {
         console.log("Invalid amount. Must be greater than zero.");
@@ -85,6 +89,7 @@ const IncomeForm = () => {
       }
   
       const response = await axios.post("http://localhost:8080/api/income", dataToSubmit);
+      console.log("✅ Expense added successfully!");
       
       console.log(response.data);
     } catch (error) {

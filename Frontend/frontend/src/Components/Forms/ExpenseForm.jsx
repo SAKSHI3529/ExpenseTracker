@@ -72,7 +72,7 @@ const ExpenseForm = () => {
       ? accounts.map((account) => ({
           value: account.id, // ✅ Use account ID as value
           label: account.name  ,
-          amt:account.amount
+          amt:(account.amount)
           // label: account.amount , // ✅ Display account name
         }))
       : [{ value: "", label: "No accounts added" }], // ✅ Show message if no accounts exist
@@ -107,14 +107,24 @@ const ExpenseForm = () => {
         account: formData.account,
       };
   
-      await axios.post("http://localhost:8080/api/expenses", dataToSubmit);
-      console.log("✅ Expense added successfully!");
+      // await axios.post("http://localhost:8080/api/expenses", dataToSubmit);
+      // console.log("✅ Expense added successfully!");
   
       // ✅ Show Success Alert
-      setAlert({ show: true, type: "success", message: "✅ Expense added successfully!" });
+      // setAlert({ show: true, type: "success", message: "✅ Expense added successfully!" });
   
       // ✅ Hide Alert After 3s
-      setTimeout(() => setAlert({ show: false }), 3000);
+      // setTimeout(() => setAlert({ show: false }), 3000);
+
+      if (isNaN(dataToSubmit.amount) || dataToSubmit.amount <= 0) {
+        console.log("Invalid amount. Must be greater than zero.");
+        return;
+      }
+  
+      const response = await axios.post("http://localhost:8080/api/income", dataToSubmit);
+      console.log("✅ Expense added successfully!");
+      console.log(response.data);
+      
     } catch (error) {
       if (error.response && error.response.status === 500) {
         const errorMessage = error.response.data;
