@@ -34,6 +34,8 @@ import Category from "../ui/Category";
 import CategorySection from "../Tables/CategorySection";
 import BudgetCard from "../Tables/BudgetCard";
 import Budget from "../ui/Budget";
+import IncomeExpenseChart from "./IncomeExpenseChart";
+import GoalList from "../Tables/GoalList";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -75,6 +77,8 @@ const Dashboard = () => {
       );
     }
 
+
+
     if (isFormOpen) {
       return (
         <AddAccountForm
@@ -104,6 +108,14 @@ const Dashboard = () => {
       case "budgetCard":
         return <Budget />;
 
+        case "charts":
+        return <IncomeExpenseChart />;
+
+        case "goalCard":
+          return <GoalList />;
+
+    
+
       case "expenseTable": // ✅ Added case for ExpenseTable
         return <ExpenseTable onEdit={setEditingExpense} />;
 
@@ -128,7 +140,7 @@ const Dashboard = () => {
     { icon: FaArrowUp, text: "Expenses", action: "expenseTable" }, // ✅ Clicking this shows ExpenseTable
     { icon: FaArrowDown, text: "Incomes", action: "incomeTable" },
     { icon: FaList, text: "Categories", action: "category" },
-    { icon: FaPiggyBank, text: "Savings Goals", action: "goals" },
+    { icon: FaPiggyBank, text: "Savings Goals", action: "goalCard" },
     { icon: FaChartPie, text: "Charts", action: "charts" },
     { icon: FaMoneyBill, text: "Budgets", action: "budgetCard" },
     { icon: FaCalendarAlt, text: "Monthly Summary", action: "summary" },

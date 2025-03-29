@@ -4,17 +4,18 @@ import Form from "../ui/Form";
 import { useState, useEffect } from "react";
 import Alert from "../ui/Alert";
 
-const ExpenseForm = () => {
+const ExpenseForm = ({ handleExpense }) => {
   const [accounts, setAccounts] = useState([]);
   const [categories, setCategories] = useState([]);
   // const [alertMessage, setAlertMessage] = useState("");
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
-
+  const [transcations, setTransactions] = useState([]);
   
 
   useEffect(() => {
       fetchAccounts();
       fetchCategories(); 
+      fetchTransactions();
     }, []);
   const fetchAccounts = async () => {
     try {
@@ -37,6 +38,52 @@ const ExpenseForm = () => {
       }
     };
 
+    const fetchTransactions = async () => {
+      try {
+        // ✅ Fetch Expenses
+        const expenseResponse = await axios.get("http://localhost:8080/api/expenses");
+    
+        // ✅ Fetch Incomes
+        const incomeResponse = await axios.get("http://localhost:8080/api/incomes");
+    
+        
+    // ✅ Fetch Categories & Accounts to replace IDs
+    const categoryResponse = await axios.get("http://localhost:8080/api/categories");
+    const accountResponse = await axios.get("http://localhost:8080/api/account");
+
+
+    const categoryMap = categoryResponse.data.reduce((map, cat) => {
+      map[cat.id] = cat.name;
+      return map;
+    }, {});
+
+    const accountMap = accountResponse.data.reduce((map, acc) => {
+      map[acc.id] = acc.name;
+      return map;
+    }, {});
+        // ✅ Merge Expenses & Incomes as Transactions
+        const transactions = [
+          ...expenseResponse.data.map((expense) => ({
+            ...expense,
+            type: "expense",
+          })),
+          ...incomeResponse.data.map((income) => ({
+            ...income,
+            type: "income",
+          })),
+        ];
+    
+        // ✅ Sort transactions by date & time (NEW to OLD)
+        transactions.sort(
+          (a, b) => new Date(b.date + " " + b.time) - new Date(a.date + " " + a.time)
+        );
+    
+        console.log("✅ Transactions:", transactions);
+        setTransactions(transactions);
+      } catch (error) {
+        console.error("❌ Error fetching transactions:", error);
+      }
+    };
     
   const initialFormData = {
     title: "",
@@ -105,6 +152,16 @@ const ExpenseForm = () => {
         ...formData,
         amount: parseFloat(formData.amount),
         account: formData.account,
+        title: formData.title.trim(),
+        category: formData.category, 
+        // amount: parseFloat(formData.amount),
+        date: formData.date,
+        time: formData.time,
+        categoryId: formData.category,  // ✅ Ensure correct field name
+        accountId: formData.account,   // ✅ Ensure correct field name
+        note: formData.note?.trim() || "", // ✅ Optional but handled
+        type: "expense", // ✅ Ensure the type is correctly set
+
       };
   
       // await axios.post("http://localhost:8080/api/expenses", dataToSubmit);
@@ -116,13 +173,23 @@ const ExpenseForm = () => {
       // ✅ Hide Alert After 3s
       // setTimeout(() => setAlert({ show: false }), 3000);
 
-      if (isNaN(dataToSubmit.amount) || dataToSubmit.amount <= 0) {
-        console.log("Invalid amount. Must be greater than zero.");
-        return;
-      }
+      if (!dataToSubmit.title || isNaN(dataToSubmit.amount) || dataToSubmit.amount <= 0 || 
+      !dataToSubmit.date || !dataToSubmit.time || !dataToSubmit.categoryId || !dataToSubmit.accountId) {
+    console.error("❌ Missing required fields!", dataToSubmit);
+    setAlert({ show: true, type: "error", message: "Please fill in all required fields." });
+    return;
+  }
   
-      const response = await axios.post("http://localhost:8080/api/income", dataToSubmit);
+  console.log("📤 Sending Expense Data:", dataToSubmit);
+      const response = await axios.post("http://localhost:8080/api/expenses", dataToSubmit);
       console.log("✅ Expense added successfully!");
+       // ✅ Refresh Transactions Immediately
+       await fetchTransactions();
+       if (handleExpense) {
+        handleExpense(formData.category, dataToSubmit.amount);
+      } else {
+        console.error("❌ handleExpense is not defined!");
+      }
       console.log(response.data);
       
     } catch (error) {

@@ -1,10 +1,13 @@
 import axios from "axios";
 import Form from "../ui/Form";
+import { useState } from "react";
 
-const SetGoalForm = () => {
+const SetGoalForm = ({ fetchGoals }) => {
+  const [errorMessage, setErrorMessage] = useState("");
+
   const initialFormData = {
     title: "",
-    goalAmount: "",
+    targetAmount: "",
     startDate: new Date().toISOString().split("T")[0], // Auto-fill today's date
     targetDate: "",
     note: "",
@@ -12,7 +15,7 @@ const SetGoalForm = () => {
 
   const goalFields = [
     { name: "title", label: "Title", type: "text", placeholder: "Enter Title" },
-    { name: "goalAmount", label: "Goal Amount", type: "number", placeholder: "Enter Amount" },
+    { name: "targetAmount", label: "Goal Amount", type: "number", placeholder: "Enter Amount" }, // ✅ Fixed name
     { name: "startDate", label: "Start Date", type: "date" },
     { name: "targetDate", label: "Target Date", type: "date" },
     { name: "note", label: "Add Note", type: "text", placeholder: "Enter Note (optional)" },
@@ -22,28 +25,38 @@ const SetGoalForm = () => {
     try {
       const dataToSubmit = {
         ...formData,
-        goalAmount: parseFloat(formData.goalAmount), // ✅ Convert to number
+        targetAmount: parseFloat(formData.targetAmount), // ✅ Fixed field name
       };
 
-      if (isNaN(dataToSubmit.goalAmount) || dataToSubmit.goalAmount <= 0) {
-        console.log("Invalid amount. Must be a number greater than zero.");
+      if (isNaN(dataToSubmit.targetAmount) || dataToSubmit.targetAmount <= 0) {
+        setErrorMessage("Invalid amount. Must be greater than zero.");
         return;
       }
 
       await axios.post("http://localhost:8080/api/goals", dataToSubmit);
-      console.log("Goal set successfully!");
+      console.log("✅ Goal set successfully!");
+
+      if (fetchGoals) {
+        fetchGoals(); // ✅ Refresh the goal list after submission
+      }
+      
+      setErrorMessage(""); // ✅ Clear error message after success
     } catch (error) {
-      console.log("Failed to set goal.");
+      setErrorMessage("❌ Failed to set goal. Please try again.");
+      console.error("❌ Error:", error);
     }
   };
 
   return (
-    <Form
-      title="Set Goal"
-      initialFormData={initialFormData}
-      fields={goalFields}
-      onSubmit={handleGoalSubmit}
-    />
+    <div>
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+      <Form
+        title="Set Goal"
+        initialFormData={initialFormData}
+        fields={goalFields}
+        onSubmit={handleGoalSubmit}
+      />
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import AddAccountForm from "../Forms/AddAccountForm";
 import EditAccount from "../EditForms/EditAccount";
 import Alert from "../ui/Alert";
+import AccountDetails from "../EditForms/AccountDetails";
 
 const AccountCard = () => {
   const [accounts, setAccounts] = useState([]);
@@ -13,6 +14,10 @@ const AccountCard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
   const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+
+  const [transactions, setTransactions] = useState([]);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [isTransactionOpen, setIsTransactionOpen] = useState(false);
 
   useEffect(() => {
     if (alert.show) {
@@ -104,6 +109,43 @@ const AccountCard = () => {
     );
     setIsEditing(false);
   };
+
+  const handleDetails = async (account) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/expenses?accountId=${account.id}`
+        
+      );
+      const transactions = response.data;
+
+    console.log(`✅ Transactions for account ${account.name}:`, transactions);
+
+
+      if (response.data.length === 0) {
+        console.warn("⚠ No transactions found for this account.");
+      }
+  
+      // ✅ Group transactions by month & year
+      const groupedTransactions = response.data.reduce((acc, transaction) => {
+        const date = new Date(transaction.date);
+        const monthYear = date.toLocaleString("default", { month: "long", year: "numeric" });
+  
+        if (!acc[monthYear]) acc[monthYear] = [];
+        acc[monthYear].push(transaction);
+  
+        return acc;
+      }, {});
+  
+      console.log("✅ Transactions grouped:", groupedTransactions);
+      setTransactions(transactions);
+      setSelectedAccount(account);
+      setIsTransactionOpen(true);
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      setTransactions([]);
+    }
+  };
+  
   return (
     <>
       {alert.show && (
@@ -147,8 +189,6 @@ const AccountCard = () => {
                     </div>
                   </div>
 
-                
-
                   <div className="relative dropdown-container">
                     <FaEllipsisH
                       size={20}
@@ -157,6 +197,12 @@ const AccountCard = () => {
                     />
                     {dropdownOpen === account.id && (
                       <div className="absolute right-0 mt-2 w-32 bg-gray-700 rounded-lg shadow-lg z-50 p-2">
+                        <button
+                          onClick={() => handleDetails(account)}
+                          className="block w-full text-left px-4 py-2 text-white hover:bg-gray-600"
+                        >
+                          Details
+                        </button>
                         <button
                           onClick={() => handleEdit(account)}
                           className="block w-full text-left px-4 py-2 text-white hover:bg-gray-600"
@@ -180,6 +226,38 @@ const AccountCard = () => {
             )}
           </div>
 
+          {/* {isTransactionOpen && selectedAccount && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-md z-50">
+          <div className="bg-gray-800 border border-gray-600 p-6 rounded-xl shadow-xl w-96">
+            <h2 className="text-2xl font-bold text-center text-yellow-300 mb-4">
+              Transactions for {selectedAccount.name}
+            </h2>
+            {transactions.length > 0 ? (
+              <ul className="space-y-2">
+                {transactions.map((transaction) => (
+                  <li
+                    key={transaction.id}
+                    className="bg-gray-700 p-3 rounded-lg flex justify-between"
+                  >
+                    <span>{transaction.category}</span>
+                    <span>₹{transaction.amount.toFixed(2)}</span>
+                    <span>{new Date(transaction.date).toLocaleDateString()}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-400">No transactions found.</p>
+            )}
+            <button
+              onClick={closeTransactionModal}
+              className="bg-red-500 px-4 py-2 mt-4 w-full text-white rounded-lg hover:bg-red-400"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+        )} */}
+
           {/* Add Account Button */}
           <div className="flex justify-center mt-6">
             <button
@@ -199,6 +277,14 @@ const AccountCard = () => {
                 onAddAccount={addAccountToDB}
               />
             </div>
+          )}
+
+          {isTransactionOpen && selectedAccount && (
+            <AccountDetails
+              account={selectedAccount}
+              transactions={transactions}
+              onClose={() => setIsTransactionOpen(false)}
+            />
           )}
         </div>
       )}
