@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaSun, FaMoon, FaBell, FaBars } from "react-icons/fa";
+import { assets } from "../../assets/assets";
 
 const Navbar = ({ toggleSidebar }) => {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
@@ -19,7 +20,8 @@ const Navbar = ({ toggleSidebar }) => {
   return (
     <nav className=" bg-[##FFFFFF] shadow-md md:max-lg:flex">
       <div className="max-w-screen-xl flex justify-between items-center mx-auto md:ml-64 p-4">
-        <Link to="/" className="text-2xl font-semibold text-[#17153B]">TrackMyWallet</Link>
+        {/* <Link to="/" className="text-2xl font-semibold text-[#17153B]">TrackMyWallet</Link> */}
+        <img src={assets.logoName} alt="" className="w-80 p-0" />
         <div className="flex items-center gap-4">
           {/* <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-lg bg-gray-200 dark:bg-gray-100 hover:bg-[#E8F9FF] dark:hover:bg-[#C4D9FF] transition">
             {darkMode ? <FaSun className="text-yellow-400 text-xl" /> : <FaMoon className="text-gray-600 text-xl" />}
@@ -29,7 +31,7 @@ const Navbar = ({ toggleSidebar }) => {
           </button>
           <div className="relative">
             <button onClick={() => setMenuOpen(!menuOpen)} className="flex items-center gap-2">
-              <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="User" className="w-10 h-10 rounded-full border" />
+              <img src={assets.user_img} alt="User" className="w-full h-10 rounded-full border" />
             </button>
             {menuOpen && (
               <div className="absolute right-0 top-full mt-2 min-w-[200px] bg-white  rounded-lg shadow-lg p-3 z-50">

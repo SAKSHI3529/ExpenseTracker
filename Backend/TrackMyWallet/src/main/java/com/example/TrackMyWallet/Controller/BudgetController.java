@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -53,6 +54,23 @@ public class BudgetController {
         Budget savedBudget = budgetService.updateBudget(updatedBudget);
         return ResponseEntity.ok(savedBudget);
     }
+
+
+    @PutMapping("/spent")
+    public ResponseEntity<String> updateSpent(@RequestBody Map<String, Object> request) {
+        String category = (String) request.get("category");
+        String month = (String) request.get("month");
+        Double amount = (Double) request.get("amount");
+
+        System.out.println("🔹 Updating spent amount...");
+        System.out.println("Category: " + category);
+        System.out.println("Month: " + month);
+        System.out.println("Amount: " + amount);
+
+        budgetService.updateBudgetSpent(category, month, amount);
+        return ResponseEntity.ok("✅ Budget updated successfully");
+    }
+
 
 
 

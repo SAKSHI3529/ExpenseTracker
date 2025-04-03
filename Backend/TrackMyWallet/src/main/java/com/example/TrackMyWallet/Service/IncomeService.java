@@ -9,8 +9,11 @@ import com.example.TrackMyWallet.Repository.IncomeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class IncomeService {
@@ -92,4 +95,27 @@ public class IncomeService {
         incomeRepo.deleteById(id);
     }
 
+    public double getTotalIncome() {
+        List<Income> incomes = incomeRepo.findAll();
+        return incomes.stream().mapToDouble(Income::getAmount).sum();
+    }
+
+    public List<Map<String, Object>> getMonthlyIncomeTotals() {
+        List<Income> incomes = incomeRepo.findAll();
+
+        return incomes.stream()
+                .collect(Collectors.groupingBy(
+                        income -> income.getDate().getMonth(),
+                        Collectors.summingDouble(Income::getAmount)
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("month", entry.getKey().toString());
+                    map.put("income", entry.getValue());
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
 }

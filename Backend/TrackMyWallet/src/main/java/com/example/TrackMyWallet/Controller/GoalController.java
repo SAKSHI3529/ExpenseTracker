@@ -21,22 +21,34 @@ public class GoalController {
     private GoalService goalService;
 
     @PostMapping
-    public Goal createGoal(@RequestBody Goal goal) {
-        System.out.println("Received API Request: " + goal); // ✅ Debug log to verify incoming data
-        return goalService.addGoals(goal);
+    public ResponseEntity<Goal> createGoal(@RequestBody Goal goal) {
+        return ResponseEntity.ok(goalService.createGoal(goal));
     }
 
     // Get All goals
     @GetMapping
-    public List<Goal> getAllGoals() {
-        return goalService.getAllGoals();
+    public ResponseEntity<List<Goal>> getAllGoals() {
+        return ResponseEntity.ok(goalService.getAllGoals());
+    }
+
+    @GetMapping("/{goalId}")
+    public ResponseEntity<Goal> getGoalById(@PathVariable String goalId) {
+        Goal goal = goalService.getGoalById(goalId); // ✅ Service method already extracts Goal
+        return ResponseEntity.ok(goal);
+    }
+
+
+
+    @PutMapping("/{goalId}/save")
+    public ResponseEntity<Goal> updateGoalSavings(@PathVariable String goalId, @RequestParam double amount) {
+        return ResponseEntity.ok(goalService.updateGoalSavings(goalId, amount));
     }
 
     // Get Expense by ID
-    @GetMapping("/{id}")
-    public Optional<Goal> getGoalById(@PathVariable String id) {
-        return goalService.getGoalById(id);
-    }
+//    @GetMapping("/{id}")
+//    public Optional<Goal> getGoalById(@PathVariable String id) {
+//        return goalService.getGoalById(id);
+//    }
 
     // Get Expenses by Category
     @GetMapping("/title/{title}")
@@ -44,16 +56,16 @@ public class GoalController {
         return goalService.getGoalByTitle(title);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Goal> updateGoal(@PathVariable("id") String id, @RequestBody Goal updatedGoal) {
-        if (!goalService.getGoalById(id).isPresent()) {
-            return ResponseEntity.notFound().build(); // ✅ Returns 404 if not found
-        }
-        updatedGoal.setId(id); // ✅ Ensures ID is set correctly
-        Goal savedGoal = goalService.updateGoal(updatedGoal);
-        return ResponseEntity.ok(savedGoal
-        );
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Goal> updateGoal(@PathVariable("id") String id, @RequestBody Goal updatedGoal) {
+//        if (!goalService.getGoalById(id).isPresent()) {
+//            return ResponseEntity.notFound().build(); // ✅ Returns 404 if not found
+//        }
+//        updatedGoal.setId(id); // ✅ Ensures ID is set correctly
+//        Goal savedGoal = goalService.updateGoal(updatedGoal);
+//        return ResponseEntity.ok(savedGoal
+//        );
+//    }
 
     // Delete an Expense
     @DeleteMapping("/{id}")

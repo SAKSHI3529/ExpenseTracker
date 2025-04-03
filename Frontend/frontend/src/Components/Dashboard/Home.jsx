@@ -129,21 +129,22 @@ const Dashboard = () => {
   const buttons = [
     { icon: FaArrowUp, text: "Add Expense", action: "expenses" },
     { icon: FaArrowDown, text: "Add Income", action: "income" },
-    { icon: FaMoneyBill, text: "Add Budget", action: "budget" },
+    // { icon: FaMoneyBill, text: "Add Budget", action: "budget" },
     // { icon: FaBalanceScale, text: "Add New Account", action: "account" },
     { icon: FaBullseye, text: "Add New Goal", action: "goals" },
   ];
 
   const sidebarItems = [
-    { icon: FaDatabase, text: "Dashboard", action: "home" },
+    { icon: FaCalendarAlt, text: "Dashboard", action: "home" },
     { icon: FaDatabase, text: "Accounts", action: "account" },
     { icon: FaArrowUp, text: "Expenses", action: "expenseTable" }, // ✅ Clicking this shows ExpenseTable
     { icon: FaArrowDown, text: "Incomes", action: "incomeTable" },
     { icon: FaList, text: "Categories", action: "category" },
     { icon: FaPiggyBank, text: "Savings Goals", action: "goalCard" },
-    { icon: FaChartPie, text: "Charts", action: "charts" },
     { icon: FaMoneyBill, text: "Budgets", action: "budgetCard" },
-    { icon: FaCalendarAlt, text: "Monthly Summary", action: "summary" },
+    { icon: FaChartPie, text: "Charts", action: "charts" },
+    
+    // { icon: FaCalendarAlt, text: "Monthly Summary", action: "summary" },
   ];
 
   return (

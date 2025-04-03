@@ -159,7 +159,7 @@ const ExpenseForm = ({ handleExpense }) => {
         time: formData.time,
         categoryId: formData.category,  // ✅ Ensure correct field name
         accountId: formData.account,   // ✅ Ensure correct field name
-        note: formData.note?.trim() || "", // ✅ Optional but handled
+        note: formData.note?.trim() || "Not Added",  // ✅ Optional but handled
         type: "expense", // ✅ Ensure the type is correctly set
 
       };

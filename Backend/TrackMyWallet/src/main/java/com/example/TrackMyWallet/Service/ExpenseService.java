@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -39,9 +42,19 @@ public class ExpenseService {
 
     public Expense addExpense(Expense expense) {
         try {
-            Optional<Account> accountOpt = accountRepo.findById(expense.getAccount());
+
+            System.out.println("📩 Incoming Expense Data: " + expense);
+
+            if (expense.getAccountId() == null) {
+                throw new RuntimeException("❌ Account ID is missing!");
+            }
+
+
+            Optional<Account> accountOpt = accountRepo.findById(expense.getAccountId());
+
 
             if (accountOpt.isPresent()) {
+
                 Account account = accountOpt.get();
 
                 // ✅ Check balance before adding expense
@@ -53,8 +66,21 @@ public class ExpenseService {
                 account.setAmount(account.getAmount() - expense.getAmount());
                 accountRepo.save(account);
 
+                // ✅ Save Expense
+
+
+                // ✅ Update Budget's Spent Amount
+                budgetService.updateBudgetSpent(
+                        expense.getCategory(),
+                        expense.getDate().getMonth().name() + ", " + expense.getDate().getYear(),
+                        expense.getAmount()
+                );
+
+                Expense savedExpense = expenseRepo.save(expense);
+                System.out.println("✅ Expense Saved: " + savedExpense);
                 // ✅ Save expense
-                return expenseRepo.save(expense);
+//                return expenseRepo.save(expense);
+                return savedExpense;
             } else {
                 throw new RuntimeException("❌ Account not found: " + expense.getAccount());
             }
@@ -87,7 +113,10 @@ public class ExpenseService {
 
 //    public Expense getExpenseById(int expenseId) {
 //        return expenseRepo.findById(expenseId).get();
+
 //    }
+
+
 
     // Get Expenses by Category
     public List<Expense> getExpensesByCategory(String category) {
@@ -109,5 +138,28 @@ public class ExpenseService {
         expenseRepo.deleteById(id);
     }
 
+    public double getTotalExpense() {
+        List<Expense> expenses = expenseRepo.findAll();
+        return expenses.stream().mapToDouble(Expense::getAmount).sum();
+    }
+
+    public List<Map<String, Object>> getMonthlyExpenseTotals() {
+        List<Expense> expenses = expenseRepo.findAll();
+
+        return expenses.stream()
+                .collect(Collectors.groupingBy(
+                        expense -> expense.getDate().getMonth(),
+                        Collectors.summingDouble(Expense::getAmount)
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("month", entry.getKey().toString());
+                    map.put("expense", entry.getValue());
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
 
 }

@@ -18,25 +18,25 @@ import { BiSolidCoupon } from "react-icons/bi";
 import BudgetCard from "../Tables/BudgetCard";
 
 
-const iconMap = {
-  FaCar: <FaCar size={24} />,
-  GiClothes: <GiClothes size={24} />,
-  FaHome: <FaHome size={24} />,
-  FaUtensils: <FaUtensils size={24} />,
-  FaShoppingCart: <FaShoppingCart size={24} />,
-  PiFilmSlateDuotone: <PiFilmSlateDuotone size={24} />,
-  FaHeartbeat: <FaHeartbeat size={24} />,
-  FaCheckCircle: <FaCheckCircle size={24} />,
-  MdSportsCricket: <MdSportsCricket size={24} />,
-  FaWallet: <FaWallet size={24} />,
-  FaAward: <FaAward size={24} />,
-  BiSolidCoupon: <BiSolidCoupon size={24} />,
-  PiStudentFill: <PiStudentFill size={24} />,
-  FaBus: <FaBus size={24} />,
-  MdOutlinePhoneIphone: <MdOutlinePhoneIphone size={24} />,
-  FaGift: <FaGift size={24} />,
-};
-const AddBudgetForm = ({ category, onClose, onSaveBudget }) => {
+// const iconMap = {
+//   FaCar: <FaCar size={24} />,
+//   GiClothes: <GiClothes size={24} />,
+//   FaHome: <FaHome size={24} />,
+//   FaUtensils: <FaUtensils size={24} />,
+//   FaShoppingCart: <FaShoppingCart size={24} />,
+//   PiFilmSlateDuotone: <PiFilmSlateDuotone size={24} />,
+//   FaHeartbeat: <FaHeartbeat size={24} />,
+//   FaCheckCircle: <FaCheckCircle size={24} />,
+//   MdSportsCricket: <MdSportsCricket size={24} />,
+//   FaWallet: <FaWallet size={24} />,
+//   FaAward: <FaAward size={24} />,
+//   BiSolidCoupon: <BiSolidCoupon size={24} />,
+//   PiStudentFill: <PiStudentFill size={24} />,
+//   FaBus: <FaBus size={24} />,
+//   MdOutlinePhoneIphone: <MdOutlinePhoneIphone size={24} />,
+//   FaGift: <FaGift size={24} />,
+// };
+const AddBudgetForm = ({ category, onClose, onSaveBudget , iconMap }) => {
   const [limit, setLimit] = useState("");
 
   const currentMonth = new Date().toLocaleString("default", { month: "long" });
@@ -66,14 +66,16 @@ const AddBudgetForm = ({ category, onClose, onSaveBudget }) => {
   
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-md">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-md">
       <div className="bg-gray-800 border border-gray-600 p-6 rounded-xl shadow-xl w-96">
         <h2 className="text-2xl font-bold text-center text-yellow-300 mb-4">
           Set Budget
         </h2>
 
         <div className="flex items-center gap-3 p-3 bg-gray-700 rounded-lg">
-          <img src={category.icon} alt={category.name} className="w-10 h-10 rounded-full" />
+          {/* <img src={iconMap[category.icon]} alt={category.name} className="w-10 h-10 rounded-full" /> */}
+          {iconMap[category.icon] && <div className="w-10 h-10 text-yellow-300">{iconMap[category.icon]}</div>}
+
           <h3 className="text-lg font-semibold text-yellow-300">{category.name}</h3>
         </div>
 

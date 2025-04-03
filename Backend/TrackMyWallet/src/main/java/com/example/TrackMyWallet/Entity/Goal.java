@@ -20,17 +20,23 @@ public class Goal {
 
     private String title;       // Name of the goal (e.g., "Groceries")
     private Double amount;      // Amount spent
+    private double targetAmount; // The total amount needed
+    private double savedAmount;  // The amount saved so far
     private LocalDate startDate;     // Date of the goal
     private LocalDate targetDate;     // Date of the goal
     private String note;        // Additional details about the goal
 
 
-    public Goal(String title, Double amount, LocalDate startDate, LocalDate targetDate,  String note) {
+
+
+    public Goal(String title, Double amount, LocalDate startDate, LocalDate targetDate, String note ,double targetAmount, double savedAmount) {
         this.title = title;
         this.amount = amount;
         this.startDate = startDate;
         this.targetDate = targetDate;
         this.note = note;
+        this.targetAmount = targetAmount;
+        this.savedAmount = savedAmount;
     }
 
     public Goal(){
@@ -85,6 +91,22 @@ public class Goal {
         this.note = note;
     }
 
+    public double getTargetAmount() {
+        return targetAmount;
+    }
+
+    public void setTargetAmount(double targetAmount) {
+        this.targetAmount = targetAmount;
+    }
+
+    public double getSavedAmount() {
+        return savedAmount;
+    }
+
+    public void setSavedAmount(double savedAmount) {
+        this.savedAmount = savedAmount;
+    }
+
     @Override
     public String toString() {
         return "Goal{" +
@@ -94,6 +116,9 @@ public class Goal {
                 ", startDate='" + startDate + '\'' +
                 ", targetDate='" + targetDate + '\'' +
                 ", note='" + note + '\'' +
+                ", targetAmount=" + targetAmount +
+                ", savedAmount=" + savedAmount +
+
 
                 '}';
     }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash ,FaWallet} from "react-icons/fa";
 import AddBudgetForm from "../Forms/AddBudgetForm";
 import ExpenseForm from "../Forms/ExpenseForm"; // ✅ Make sure ExpenseForm is imported
 
@@ -95,8 +95,10 @@ const BudgetCard = ({ title, categories = [], iconMap }) => {
                 <div key={budget.id} className="flex justify-between items-center bg-gray-800 text-yellow-200 p-3 rounded-lg mb-2">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 flex items-center justify-center bg-gray-700 p-2 rounded-lg">
-                      {iconMap[budget.icon] || "📁"}
+                    {iconMap[categories.icon] || <FaWallet />}
                     </div>
+                    
+
                     <div>
                       <h3 className="font-semibold">{budget.category}</h3>
                       <p>Limit: ₹{budget.limit.toFixed(2)}</p>
@@ -162,7 +164,7 @@ const BudgetCard = ({ title, categories = [], iconMap }) => {
       </div>
 
       {/* ✅ Expense Form */}
-      <ExpenseForm handleExpense={handleExpense} />
+      {/* <ExpenseForm handleExpense={handleExpense} /> */}
 
       {/* ✅ Budget Form Modal */}
       {isFormOpen && (
@@ -170,6 +172,7 @@ const BudgetCard = ({ title, categories = [], iconMap }) => {
           category={selectedCategory}
           onClose={() => setIsFormOpen(false)}
           onSaveBudget={handleSaveBudget}
+          iconMap={iconMap}
         />
       )}
     </div>

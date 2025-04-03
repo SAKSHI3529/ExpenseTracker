@@ -55,12 +55,25 @@ public class BudgetService {
     }
 
     public void updateBudgetSpent(String category, String month, Double amount) {
+        System.out.println("🔍 Searching for budget: Category = " + category + ", Month = " + month);
         List<Budget> budgets = budgetRepo.findByCategoryAndMonth(category, month);
+
         if (!budgets.isEmpty()) {
             Budget budget = budgets.get(0);
-            budget.setSpent(budget.getSpent() + amount);
+            System.out.println("✅ Budget found: " + budget);
+
+            double newSpent = budget.getSpent() + amount;
+            budget.setSpent(newSpent);
+
+            System.out.println("💰 New spent amount: " + newSpent);
             budgetRepo.save(budget);
+
+            System.out.println("✅ Budget updated successfully in database.");
+        } else {
+            System.out.println("❌ No matching budget found.");
         }
     }
+
+
 
 }

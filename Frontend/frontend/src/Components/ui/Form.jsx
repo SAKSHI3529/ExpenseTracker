@@ -61,8 +61,18 @@ const Form = ({ initialFormData, title, fields, onSubmit }) => {
                   ))}
                 </select>
               ) : (
-                <input type={field.type} name={field.name} value={formData[field.name]} onChange={handleChange} required className="w-full p-2 border rounded" placeholder={field.placeholder || ""} />
-              )}
+                // <input type={field.type} name={field.name} value={formData[field.name]} onChange={handleChange} required className="w-full p-2 border rounded" placeholder={field.placeholder || ""} />
+                <input
+                type={field.type}
+                name={field.name}
+                value={formData[field.name]}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                placeholder={field.placeholder || ""} 
+                required={field.name !== "note"} // ✅ Makes "Note" optional
+              />
+              
+             )}
             </div>
           ))}
           <button type="submit" className="bg-blue-300 text-white px-4 py-2 rounded w-full hover:bg-blue-500 transition">{title}</button>

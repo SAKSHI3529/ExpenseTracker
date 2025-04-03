@@ -17,28 +17,31 @@ public class GoalService {
     private GoalRepo goalRepo;
 
     // Create  Goal
-    public Goal addGoals(Goal goal) {
-        System.out.println("Saving goal: " + goal); // ✅ Debug log to verify data before saving
+//    public Goal addGoals(Goal goal) {
+//        System.out.println("Saving goal: " + goal); // ✅ Debug log to verify data before saving
+//        return goalRepo.save(goal);
+//    }
+
+    // ✅ Create a new goal
+    public Goal createGoal(Goal goal) {
+        goal.setSavedAmount(0); // Default saved amount is 0
         return goalRepo.save(goal);
     }
 
     // Get All goal
     public List<Goal> getAllGoals() {
-        List<Goal> goals = goalRepo.findAll();
-        System.out.println("🔍 Retrieved Expenses: " + goals);
 
-        // Print each object separately
-        for (Goal e : goals) {
-            System.out.println("Goal: " + e.getId() + ", Title: " + e.getTitle() + ", Amount: " + e.getAmount() + ", StartDate: " + e.getStartDate() + ", TargetDate: " + e.getTargetDate());
-        }
+        return goalRepo.findAll();
 
-        return goals;
     }
 
     // Get goal by ID
-    public Optional<Goal> getGoalById(String id) {
-        return goalRepo.findById(id);
+    public Goal getGoalById(String id) {
+        Optional<Goal> goalOptional = goalRepo.findById(id); // ✅ First, get Optional<Goal>
+        return goalOptional.orElseThrow(() -> new RuntimeException("Goal not found")); // ✅ Now call orElseThrow()
     }
+
+
 
     // Get goals by title
     public List<Goal> getGoalByTitle(String title) {
@@ -46,9 +49,14 @@ public class GoalService {
     }
 
     //update
-    public Goal updateGoal(Goal goal) {
-        return goalRepo.save(goal); //  MongoDB will update if _id exists
+    // ✅ Update goal savings
+    public Goal updateGoalSavings(String goalId, double amount) {
+        Goal goal = goalRepo.findById(goalId)
+                .orElseThrow(() -> new RuntimeException("Goal not found"));
+        goal.setSavedAmount(goal.getSavedAmount() + amount);
+        return goalRepo.save(goal);
     }
+
 
     // Delete
     public void deleteGoal(String id) {

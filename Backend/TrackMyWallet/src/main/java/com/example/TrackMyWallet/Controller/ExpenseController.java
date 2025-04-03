@@ -1,7 +1,11 @@
 package com.example.TrackMyWallet.Controller;
 
 
+import com.example.TrackMyWallet.Entity.Budget;
 import com.example.TrackMyWallet.Entity.Expense;
+import com.example.TrackMyWallet.Repository.BudgetRepo;
+import com.example.TrackMyWallet.Repository.ExpenseRepo;
+import com.example.TrackMyWallet.Service.BudgetService;
 import com.example.TrackMyWallet.Service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,15 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
+    @Autowired
+    private ExpenseRepo expenseRepo;
+
+    @Autowired
+    private BudgetService budgetService;
+
+    @Autowired
+    private BudgetRepo budgetRepo;
+
     // Add a New Expense
 //    @PostMapping
 //    public Expense createExpense(@RequestBody Expense expense) {
@@ -41,7 +54,6 @@ public class ExpenseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add expense: " + e.getMessage());
         }
     }
-
 
     // Get All Expenses
     @GetMapping
@@ -90,7 +102,23 @@ public class ExpenseController {
 
 
 
+    @GetMapping("/api/expenses")
+    public List<Expense> getExpenses() {
+        return expenseRepo.findAll();
+    }
 
+    @GetMapping("/api/budget")
+    public List<Budget> getAllBudgets() {
+        return budgetRepo.findAll();
+    }
+
+    @GetMapping("/api/budget/category/{category}/{month}")
+    public List<Budget> getBudgetByCategory(
+            @PathVariable String category,
+            @PathVariable String month
+    ) {
+        return budgetService.getBudgetsByCategoryAndMonth(category, month);
+    }
 
     // Delete an Expense
     @DeleteMapping("/{id}")
